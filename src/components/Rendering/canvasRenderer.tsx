@@ -1,12 +1,12 @@
-import {Layer} from "../../modules/classes/Layer.ts";
-import {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {useForceUpdate, useHover, useMergedRef, useMouse, useResizeObserver} from "@mantine/hooks";
 import {AspectRatio} from "@mantine/core";
-import React from "react";
+
+import type {Layer} from "../../modules/classes/Layer.ts";
 
 const globalImageCache = new Map<string, HTMLImageElement>();
 interface RenderCanvasProps {
-    layers: any[],
+    layers: Array<any>,
     invert?: boolean,
     spacing?: boolean,
     animated?: boolean
@@ -104,7 +104,7 @@ export function renderImage(
 }
 
 interface SimpleRenderProps {
-    layers: Layer[],
+    layers: Array<Layer>,
     invert?: boolean,
 }
 
@@ -212,7 +212,7 @@ export function RenderImagesWithCanvas({layers, invert = false, spacing = false}
             .sort((a, b) => a.order - b.order)
             .forEach((layer => {
                 if (globalImageCache.has(layer.source)) {
-                    let image = globalImageCache.get(layer.source) as HTMLImageElement;
+                    const image = globalImageCache.get(layer.source) as HTMLImageElement;
                     const imageRatio = renderImage(canvas, context, image, layer, hasAnimatedLayer ? elapsed : undefined);
                     if (layer.order === 0) {
                         setRatio(imageRatio);
@@ -246,11 +246,11 @@ export function RenderImagesWithCanvas({layers, invert = false, spacing = false}
         const SCALE_Y = 8;
         const x = mouseX - rect.x;
         const y = mouseY - rect.y;
-        let mousePosition = {
+        const mousePosition = {
             x,
             y
         }
-        let cardSize = {
+        const cardSize = {
             width: rect.width,
             height: rect.height
         }

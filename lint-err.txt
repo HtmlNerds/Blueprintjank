@@ -1,0 +1,218 @@
+
+X:\Blueprint\src\App.tsx
+  157:59  warning  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  157:63  warning  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  157:73  warning  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+X:\Blueprint\src\components\DeckDisplay.tsx
+  342:8  warning  React Hook useMemo has missing dependencies: 'rankOrder' and 'suits'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+X:\Blueprint\src\components\DragScroller.tsx
+  131:8  warning  React Hook useEffect has missing dependencies: 'handleMouseMove' and 'handleTouchMove'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+X:\Blueprint\src\components\DrawSimulatorModal.tsx
+  255:13  warning  Error: Cannot access variable before it is declared
+
+`simulate` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+X:\Blueprint\src\components\DrawSimulatorModal.tsx:255:13
+  253 |
+  254 |             // Pass values directly because state updates are async
+> 255 |             simulate(initialAnte, initialBlind);
+      |             ^^^^^^^^ `simulate` accessed before it is declared
+  256 |         }
+  257 |     }, [opened, selectedAnte, selectedBlind]);
+  258 |
+
+X:\Blueprint\src\components\DrawSimulatorModal.tsx:259:5
+  257 |     }, [opened, selectedAnte, selectedBlind]);
+  258 |
+> 259 |     const simulate = (overrideAnte?: string, overrideBlind?: string) => {
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 260 |         if (!seed) return;
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 261 |
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 315 |         setDiscardsUsed(0);
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 316 |     };
+      | ^^^^^^^ `simulate` is declared here
+  317 |
+  318 |     // Auto-simulate when critical params change while modal is open
+  319 |     useEffect(() => {  react-hooks/immutability
+  257:8   warning  React Hook useEffect has a missing dependency: 'simulate'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       react-hooks/exhaustive-deps
+  323:8   warning  React Hook useEffect has missing dependencies: 'opened' and 'simulate'. Either include them or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        react-hooks/exhaustive-deps
+
+X:\Blueprint\src\components\FeaturesModal.tsx
+   38:107  warning  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+   38:111  warning  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+   39:88   warning  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+   39:106  warning  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+   62:44   warning  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+   69:68   warning  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+   69:81   warning  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+   94:68   warning  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+   94:75   warning  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  120:58   warning  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  120:67   warning  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  139:51   warning  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  145:59   warning  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  145:72   warning  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  170:59   warning  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  170:79   warning  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+X:\Blueprint\src\components\Rendering\canvasRenderer.tsx
+  152:8  warning  React Hook useEffect has a missing dependency: 'forceUpdate'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             react-hooks/exhaustive-deps
+  236:8  warning  React Hook useEffect has missing dependencies: 'hasAnimatedLayer' and 'invert'. Either include them or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         react-hooks/exhaustive-deps
+  257:9  warning  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+X:\Blueprint\src\components\Rendering\canvasRenderer.tsx:257:9
+  255 |             height: rect.height
+  256 |         }
+> 257 |         setTransform(
+      |         ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  258 |             `perspective(1000px) rotateX(${
+  259 |                 (mousePosition.y / cardSize.height) * -(SCALE_Y * 2) + SCALE_Y
+  260 |             }deg) rotateY(${  react-hooks/set-state-in-effect
+  264:8  warning  React Hook useEffect has missing dependencies: 'rect.height', 'rect.width', 'rect.x', and 'rect.y'. Either include them or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     react-hooks/exhaustive-deps
+
+X:\Blueprint\src\components\Rendering\cards.tsx
+  165:14  error  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+X:\Blueprint\src\components\Rendering\cards.tsx:165:14
+  163 |     return (
+  164 |         <Paper maw={'71px'}>
+> 165 |             <Card/>
+      |              ^^^^ This component is created during render
+  166 |             </Paper>
+  167 |     )
+  168 | }
+
+X:\Blueprint\src\components\Rendering\cards.tsx:152:18
+  150 | }
+  151 | export function GameCard({card}: GameCardProps) {
+> 152 |     const Card = () => {
+      |                  ^^^^^^^
+> 153 |         if (card instanceof StandardCard_Final) {
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 154 |             return <PlayingCard card={card}/>
+      …
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 161 |         }
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 162 |     }
+      | ^^^^^^ The component is created during render here
+  163 |     return (
+  164 |         <Paper maw={'71px'}>
+  165 |             <Card/>  react-hooks/static-components
+
+X:\Blueprint\src\components\RerollCalculatorModal.tsx
+  24:13  error  Error: Calling setState from useMemo may trigger an infinite loop
+
+Each time the memo callback is evaluated it will change state. This can cause a memoization dependency to change, running the memo function again and causing an infinite loop. Instead of setting state in useMemo(), prefer deriving the value during render. (https://react.dev/reference/react/useState).
+
+X:\Blueprint\src\components\RerollCalculatorModal.tsx:24:13
+  22 |     useMemo(() => {
+  23 |         if (opened) {
+> 24 |             setStartIndex(globalStartIndex);
+     |             ^^^^^^^^^^^^^ Found setState() within useMemo()
+  25 |         }
+  26 |     }, [opened, globalStartIndex]);
+  27 |  react-hooks/set-state-in-render
+
+X:\Blueprint\src\components\blueprint\jamlView\BubbleJamlEditor.tsx
+  331:56  warning  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  331:67  warning  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+X:\Blueprint\src\components\blueprint\jamlView\JamlView.tsx
+  1128:17  warning  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+X:\Blueprint\src\components\blueprint\jamlView\JamlView.tsx:1128:17
+  1126 |             if (idx !== -1) {
+  1127 |
+> 1128 |                 setCurrentSeedIndex(idx);
+       |                 ^^^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  1129 |
+  1130 |             }
+  1131 |                                                                                                                     react-hooks/set-state-in-effect
+  1415:42  warning  Compilation Skipped: Existing memoization could not be preserved
+
+React Compiler has skipped optimizing this component because the existing manual memoization could not be preserved. The inferred dependencies did not match the manually specified dependencies, which could cause the value to change more or less frequently than expected. The inferred dependency was `wasmResults`, but the source dependencies were [jamlValid, jamlConfig, searchMode, funnyMode, funnyKeywords, wasmThreadCount, wasmBatchSize, defaultThreads]. Inferred different dependency than source.
+
+X:\Blueprint\src\components\blueprint\jamlView\JamlView.tsx:1415:42
+  1413 |
+  1414 |
+> 1415 |     const handleWasmSearch = useCallback(async () => {
+       |                                          ^^^^^^^^^^^^^
+> 1416 |
+       | ^
+> 1417 |         if (!jamlValid || !jamlConfig) {
+       …
+       | ^
+> 1714 |
+       | ^
+> 1715 |     }, [jamlValid, jamlConfig, searchMode, funnyMode, funnyKeywords, wasmThreadCount, wasmBatchSize, defaultThreads]);
+       | ^^^^^^ Could not preserve existing manual memoization
+  1716 |
+  1717 |
+  1718 |  react-hooks/preserve-manual-memoization
+  1715:8   warning  React Hook useCallback has missing dependencies: 'isThreadable' and 'wasmResults.length'. Either include them or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           react-hooks/exhaustive-deps
+
+X:\Blueprint\src\components\blueprint\jamlView\SimpleBubbleEditor.tsx
+  278:56  warning  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  278:67  warning  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+X:\Blueprint\src\components\miscSourcesDisplay.tsx
+  34:28  error    React Hook "useCardStore" is called conditionally. React Hooks must be called in the exact same order in every component render. Did you accidentally call a React Hook after an early return?  react-hooks/rules-of-hooks
+  35:27  error    React Hook "useCardStore" is called conditionally. React Hooks must be called in the exact same order in every component render. Did you accidentally call a React Hook after an early return?  react-hooks/rules-of-hooks
+  36:30  error    React Hook "useCardStore" is called conditionally. React Hooks must be called in the exact same order in every component render. Did you accidentally call a React Hook after an early return?  react-hooks/rules-of-hooks
+  37:25  error    React Hook "useCardStore" is called conditionally. React Hooks must be called in the exact same order in every component render. Did you accidentally call a React Hook after an early return?  react-hooks/rules-of-hooks
+  38:31  error    React Hook "useState" is called conditionally. React Hooks must be called in the exact same order in every component render. Did you accidentally call a React Hook after an early return?      react-hooks/rules-of-hooks
+  39:5   error    React Hook "useEffect" is called conditionally. React Hooks must be called in the exact same order in every component render. Did you accidentally call a React Hook after an early return?     react-hooks/rules-of-hooks
+  43:5   error    React Hook "useEffect" is called conditionally. React Hooks must be called in the exact same order in every component render. Did you accidentally call a React Hook after an early return?     react-hooks/rules-of-hooks
+  50:8   warning  React Hook useEffect has a missing dependency: 'embla'. Either include it or remove the dependency array                                                                                        react-hooks/exhaustive-deps
+
+X:\Blueprint\src\modules\ImmolateWrapper\index.ts
+  173:17  warning  Unexpected lexical declaration in case block                           no-case-declarations
+  672:54  warning  'source' is already declared in the upper scope on line 672 column 23  no-shadow
+  691:34  warning  'ante' is already declared in the upper scope on line 561 column 27    no-shadow
+
+X:\Blueprint\src\modules\balatrots\Lock.ts
+  26:26  warning  'item' is already declared in the upper scope on line 22 column 10  no-shadow
+  38:26  warning  'item' is already declared in the upper scope on line 34 column 19  no-shadow
+
+X:\Blueprint\src\modules\balatrots\enum\QueueName.ts
+  74:5  warning  Duplicate enum member value 8ba  @typescript-eslint/no-duplicate-enum-values
+
+X:\Blueprint\src\modules\balatrots\enum\packs\Spectral.ts
+  21:5  warning  Duplicate enum member value RETRY  @typescript-eslint/no-duplicate-enum-values
+
+X:\Blueprint\src\modules\balatrots\interface\Filter.ts
+  5:12  warning  'run' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+X:\Blueprint\src\modules\balatrots\interface\Joker.ts
+  26:18  warning  'ante' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  60:12  warning  'ante' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  65:12  warning  'ante' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  70:16  warning  'ante' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+X:\Blueprint\src\modules\balatrots\struct\SearchableItem.ts
+   1:10  warning  'Edition' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  19:12  warning  'item' is defined but never used. Allowed unused args must match /^_/u     @typescript-eslint/no-unused-vars
+
+✖ 59 problems (9 errors, 50 warnings)

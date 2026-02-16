@@ -3,12 +3,12 @@ import { createJSONStorage, devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import { LOCATIONS, LOCATION_TYPES, options } from "../const.ts";
 import { sanitizeSeed } from "../utils.ts";
-import { convertToDeckCard, generateStartingDeck, convertGameCardToDeckCard } from "../deckUtils.ts";
-import type { DeckCard } from "../deckUtils.ts";
+import { convertGameCardToDeckCard, convertToDeckCard, generateStartingDeck } from "../deckUtils.ts";
 import { Game } from "../balatrots/Game.ts";
 import { InstanceParams } from "../balatrots/struct/InstanceParams.ts";
 import { Deck, deckMap } from "../balatrots/enum/Deck.ts";
 import { Stake, stakeMap } from "../balatrots/enum/Stake.ts";
+import type { DeckCard } from "../deckUtils.ts";
 import type { StateStorage } from "zustand/middleware";
 import type { BuyMetaData } from "../classes/BuyMetaData.ts";
 import type { SeedResultsContainer } from "../ImmolateWrapper/CardEngines/Cards.ts";
@@ -483,7 +483,7 @@ export const useCardStore = create<CardStore>()(
                     }, undefined, 'Cards/ClearLockedCards'),
 
                     initializeDeck: (deckType?: string, game?: Game) => set((prev) => {
-                        let starterDeck: DeckCard[];
+                        let starterDeck: Array<DeckCard>;
 
                         if (game) {
                             const gameCards = game.getShuffledDeck(get().applicationState.selectedAnte);

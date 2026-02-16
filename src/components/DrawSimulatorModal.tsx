@@ -1,29 +1,33 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
-    Modal,
-    Group,
-    Select,
-    Button,
-    SimpleGrid,
-    Text,
-    Stack,
     Box,
-    Paper,
-    Tooltip,
+    Button,
     Flex,
+    Group,
     Menu,
-    SegmentedControl
+    Modal,
+    Paper,
+    SegmentedControl,
+    Select,
+    SimpleGrid,
+    Stack,
+    Text,
+    Tooltip
 } from '@mantine/core';
-import { IconTrash, IconRefresh, IconEdit, IconChevronRight } from '@tabler/icons-react';
+import { IconChevronRight, IconEdit, IconRefresh, IconTrash } from '@tabler/icons-react';
 import { useCardStore } from '../modules/state/store.ts';
 import { Game } from '../modules/balatrots/Game.ts';
 import { Deck, deckMap } from '../modules/balatrots/enum/Deck.ts';
 import { Stake, stakeMap } from '../modules/balatrots/enum/Stake.ts';
 import { InstanceParams } from '../modules/balatrots/struct/InstanceParams.ts';
-import { convertGameCardToDeckCard, type DeckCard } from '../modules/deckUtils.ts';
-import { Card, PlayingCard } from '../modules/balatrots/enum/cards/Card.ts';
-import { EditionItem, Edition } from '../modules/balatrots/enum/Edition.ts';
-import { SealItem, Seal } from '../modules/balatrots/enum/Seal.ts';
+import {  convertGameCardToDeckCard } from '../modules/deckUtils.ts';
+import { Card } from '../modules/balatrots/enum/cards/Card.ts';
+import { EditionItem } from '../modules/balatrots/enum/Edition.ts';
+import { SealItem } from '../modules/balatrots/enum/Seal.ts';
+import type {DeckCard} from '../modules/deckUtils.ts';
+import type { PlayingCard } from '../modules/balatrots/enum/cards/Card.ts';
+import type { Edition } from '../modules/balatrots/enum/Edition.ts';
+import type { Seal } from '../modules/balatrots/enum/Seal.ts';
 
 function SimCard({ card, selected, onClick, onUpdate, onRemove }: {
     card: DeckCard,
@@ -200,16 +204,16 @@ export function DrawSimulatorModal() {
     // Simulation State
     const [ante, setAnte] = useState<string>('1');
     const [blind, setBlind] = useState<string>('1'); // 1=Small, 2=Big, 3=Boss
-    const [fullShuffledDeck, setFullShuffledDeck] = useState<DeckCard[]>([]);
-    const [hand, setHand] = useState<DeckCard[]>([]);
+    const [fullShuffledDeck, setFullShuffledDeck] = useState<Array<DeckCard>>([]);
+    const [hand, setHand] = useState<Array<DeckCard>>([]);
     const [deckPointer, setDeckPointer] = useState<number>(0);
-    const [selectedCards, setSelectedCards] = useState<string[]>([]);
+    const [selectedCards, setSelectedCards] = useState<Array<string>>([]);
     const [handSize, setHandSize] = useState<number>(8);
     const [discardsUsed, setDiscardsUsed] = useState<number>(0);
     const [sortMode, setSortMode] = useState<string>('rank');
 
     // Helper to sort cards
-    const sortCards = useCallback((cards: DeckCard[], mode: string) => {
+    const sortCards = useCallback((cards: Array<DeckCard>, mode: string) => {
         const suits = ['Spades', 'Hearts', 'Clubs', 'Diamonds'];
         const rankOrder = ['A', 'K', 'Q', 'J', '10', '9', '8', '7', '6', '5', '4', '3', '2'];
 

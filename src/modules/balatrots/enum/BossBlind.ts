@@ -1,5 +1,5 @@
 import {ItemImpl} from "../interface/Item";
-import {Run} from "../interface/Run";
+import type {Run} from "../interface/Run";
 
 export enum BossBlindEnum {
     THE_ARM = "The Arm",

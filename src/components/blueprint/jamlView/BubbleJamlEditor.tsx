@@ -1,7 +1,7 @@
-import React, { useState, useCallback, useMemo } from 'react';
-import { Box, Group, Stack, Text, Paper, Badge, ActionIcon } from '@mantine/core';
+import React, { useCallback, useMemo, useState } from 'react';
+import { ActionIcon, Badge, Box, Group, Paper, Stack, Text } from '@mantine/core';
 import yaml from 'js-yaml';
-import { IconX, IconPlus, IconChevronDown, IconChevronUp } from '@tabler/icons-react';
+import { IconChevronDown, IconChevronUp, IconPlus, IconX } from '@tabler/icons-react';
 
 // Accessible color palette - high contrast, vision-friendly
 const ACCESSIBLE_COLORS = {
@@ -25,7 +25,7 @@ interface FilterBubbleProps {
   filter: {
     type: string; // joker, voucher, etc.
     value?: string;
-    antes?: number[];
+    antes?: Array<number>;
     properties?: Record<string, any>;
   };
   isSelected: boolean;
@@ -110,7 +110,7 @@ interface SectionProps {
   filters: Array<{
     type: string;
     value?: string;
-    antes?: number[];
+    antes?: Array<number>;
     properties?: Record<string, any>;
   }>;
   onAddFilter: () => void;
@@ -205,7 +205,7 @@ export function BubbleJamlEditor({ initialJaml, onJamlChange }: BubbleJamlEditor
 
   // Convert JAML to filter format
   const filters = useMemo(() => {
-    const parseFilters = (items: any[]) => {
+    const parseFilters = (items: Array<any>) => {
       if (!Array.isArray(items)) return [];
       return items.map((item: any) => {
         const type = Object.keys(item).find(k => ['joker', 'soulJoker', 'voucher', 'tarotCard', 'planetCard', 'spectralCard', 'standardCard', 'tag', 'boss'].includes(k));

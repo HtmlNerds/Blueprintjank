@@ -1,10 +1,10 @@
-import {BuyMetaData} from "../modules/classes/BuyMetaData.ts";
-import {useCardStore} from "../modules/state/store.ts";
 import {Badge, Button, Group, Paper, Stack, Text, Timeline, Title} from "@mantine/core";
-import {IconJoker, IconDownload, IconUpload} from "@tabler/icons-react";
-import {LOCATIONS} from "../modules/const.ts";
+import {IconDownload, IconJoker, IconUpload} from "@tabler/icons-react";
 import {toHeaderCase} from "js-convert-case";
 import {useRef} from "react";
+import {LOCATIONS} from "../modules/const.ts";
+import {useCardStore} from "../modules/state/store.ts";
+import {BuyMetaData} from "../modules/classes/BuyMetaData.ts";
 
 export default function PurchaseTimeline({buys, sells}: {
     buys: { [key: string]: BuyMetaData },
@@ -201,7 +201,7 @@ export default function PurchaseTimeline({buys, sells}: {
                                                 color={'green'}
                                                 size={'compact-sm'}
                                                 onClick={() => {
-                                                    let sellData = new BuyMetaData({
+                                                    const sellData = new BuyMetaData({
                                                         ...buyData,
                                                         ante: String(selectedAnte),
                                                         blind: selectedBlind,

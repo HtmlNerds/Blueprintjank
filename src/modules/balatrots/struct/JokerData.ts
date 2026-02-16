@@ -1,7 +1,7 @@
 import {CommonJoker, CommonJokerCard} from '../enum/cards/CommonJoker';
 import {Edition} from '../enum/Edition';
 import {JokerStickers} from './JokerStickers';
-import {JokerImpl} from '../interface/Joker';
+import type {JokerImpl} from '../interface/Joker';
 
 export class JokerData {
     constructor(

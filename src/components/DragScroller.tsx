@@ -1,5 +1,6 @@
-import React, {ReactNode, useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState} from "react";
 import {Box} from "@mantine/core";
+import type {ReactNode} from "react";
 
 interface DragScrollProps {
     children: ReactNode;

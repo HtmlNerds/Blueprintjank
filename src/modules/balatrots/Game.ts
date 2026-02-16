@@ -396,7 +396,7 @@ export class Game extends Lock {
 
         if (isAvailabilityLocked || (!showmanApplies && isPurchasedLocked) || item.getName() === "RETRY") {
             let resample = 2;
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+             
             while (true) {
                 item = items[this.randint(`${id}_resample${resample}`, 0, items.length - 1)];
                 resample++;
@@ -431,7 +431,7 @@ export class Game extends Lock {
 
         if (isAvailabilityLocked || (!showmanApplies && isPurchasedLocked) || item.getName() === "RETRY") {
             let resample = 2;
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+             
             while (true) {
                 item = items[this.randint(`${id}_resample${resample}`, 0, items.length - 1)];
                 resample++;
@@ -1223,7 +1223,7 @@ item wheel_of_fortune_edition(instance* inst) {
 
         for (let i = result.length - 1; i >= 1; i--) {
             const j = rng.randint(1, i + 1) - 1;
-            let temp = result[i];
+            const temp = result[i];
             result[i] = result[j];
             result[j] = temp;
         }

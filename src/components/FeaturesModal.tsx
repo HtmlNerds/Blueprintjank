@@ -1,7 +1,7 @@
 import React from "react";
+import { Accordion, Container, List, Modal, Stack, Text } from "@mantine/core";
+import { IconCalculator, IconCamera, IconCards, IconEye, IconLock, IconRefresh } from "@tabler/icons-react";
 import { useCardStore } from "../modules/state/store.ts";
-import { Accordion, Container, Modal, Text, Stack, List } from "@mantine/core";
-import { IconCalculator, IconCards, IconLock, IconCamera, IconRefresh, IconEye } from "@tabler/icons-react";
 
 export default function FeaturesModal() {
     const featuresModalOpen = useCardStore(state => state.applicationState.featuresModalOpen);

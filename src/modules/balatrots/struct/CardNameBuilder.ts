@@ -1,6 +1,6 @@
-import { Card } from "../enum/cards/Card";
 import { Edition } from "../enum/Edition";
 import { Seal } from "../enum/Seal";
+import type { Card } from "../enum/cards/Card";
 
 export class CardNameBuilder {
     seal: string;

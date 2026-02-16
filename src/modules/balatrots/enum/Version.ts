@@ -9,7 +9,7 @@ export class Version {
         return this.version;
     }
 
-    public static values(): Version[] {
+    public static values(): Array<Version> {
         return [
             Version.v_100n,
             Version.v_101c,

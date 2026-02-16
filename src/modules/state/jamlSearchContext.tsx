@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState } from 'react';
+import type { ReactNode } from 'react';
 
 interface JamlSearchState {
     searchMode: 'quick' | 'sequential' | 'funny';
@@ -11,7 +12,7 @@ interface JamlSearchState {
     sequentialStartSeed: string;
     sequentialEndSeed: string;
     funnyMode: 'palindrome' | 'keyword';
-    funnyKeywords: string[];
+    funnyKeywords: Array<string>;
     selectedFilterKey: string;
     customJamlText: string;
 }
@@ -27,7 +28,7 @@ interface JamlSearchContextType extends JamlSearchState {
     setSequentialStartSeed: (seed: string) => void;
     setSequentialEndSeed: (seed: string) => void;
     setFunnyMode: (mode: 'palindrome' | 'keyword') => void;
-    setFunnyKeywords: (keywords: string[]) => void;
+    setFunnyKeywords: (keywords: Array<string>) => void;
     setSelectedFilterKey: (key: string) => void;
     setCustomJamlText: (text: string) => void;
 }
@@ -47,7 +48,7 @@ export function JamlSearchProvider({ children }: { children: ReactNode }) {
     const [sequentialStartSeed, setSequentialStartSeed] = useState('11111111');
     const [sequentialEndSeed, setSequentialEndSeed] = useState('ZZZZZZZZ');
     const [funnyMode, setFunnyMode] = useState<'palindrome' | 'keyword'>('palindrome');
-    const [funnyKeywords, setFunnyKeywords] = useState<string[]>(['']);
+    const [funnyKeywords, setFunnyKeywords] = useState<Array<string>>(['']);
     const [selectedFilterKey, setSelectedFilterKey] = useState<string>('default');
     const [customJamlText, setCustomJamlText] = useState<string>('');
 

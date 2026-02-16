@@ -1,6 +1,6 @@
-import React, { useState, useCallback } from 'react';
-import { Box, Group, Stack, Text, Paper, Badge, ActionIcon, TextInput, Popover } from '@mantine/core';
-import { IconX, IconPlus } from '@tabler/icons-react';
+import React, { useCallback, useState } from 'react';
+import { ActionIcon, Badge, Box, Group, Paper, Popover, Stack, Text, TextInput } from '@mantine/core';
+import { IconPlus, IconX } from '@tabler/icons-react';
 import yaml from 'js-yaml';
 
 // Accessible colors - high contrast, vision-friendly
@@ -20,7 +20,7 @@ const COLORS = {
 interface Filter {
   type: string;
   value?: string;
-  antes?: number[];
+  antes?: Array<number>;
 }
 
 function FilterBubble({ filter, isSelected, onTap, onRemove, color }: {
@@ -183,7 +183,7 @@ export function SimpleBubbleEditor({ initialJaml, onJamlChange }: SimpleBubbleEd
     }
   }, [onJamlChange]);
 
-  const parseFilters = useCallback((items: any[]): Filter[] => {
+  const parseFilters = useCallback((items: Array<any>): Array<Filter> => {
     if (!Array.isArray(items)) return [];
     return items.map((item: any) => {
       const type = Object.keys(item).find(k => ['joker', 'soulJoker', 'voucher', 'tarotCard', 'planetCard', 'spectralCard', 'standardCard', 'tag', 'boss'].includes(k));

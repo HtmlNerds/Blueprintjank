@@ -1,4 +1,4 @@
-import { ItemImpl } from '../interface/Item';
+import type { ItemImpl } from '../interface/Item';
 
 export class Option {
     constructor(
