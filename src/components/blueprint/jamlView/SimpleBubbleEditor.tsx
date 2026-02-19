@@ -87,7 +87,7 @@ function AddFilterBubble({ onAdd, color }: { onAdd: (type: string) => void; colo
   const [search, setSearch] = useState('');
 
   const filterTypes = [
-    'joker', 'soulJoker', 'voucher', 'tarotCard', 'planetCard', 
+    'joker', 'legendaryJoker', 'voucher', 'tarotCard', 'planetCard', 
     'spectralCard', 'standardCard', 'tag', 'boss'
   ];
 
@@ -186,7 +186,7 @@ export function SimpleBubbleEditor({ initialJaml, onJamlChange }: SimpleBubbleEd
   const parseFilters = useCallback((items: Array<any>): Array<Filter> => {
     if (!Array.isArray(items)) return [];
     return items.map((item: any) => {
-      const type = Object.keys(item).find(k => ['joker', 'soulJoker', 'voucher', 'tarotCard', 'planetCard', 'spectralCard', 'standardCard', 'tag', 'boss'].includes(k));
+      const type = Object.keys(item).find(k => ['joker', 'legendaryJoker', 'voucher', 'tarotCard', 'planetCard', 'spectralCard', 'standardCard', 'tag', 'boss'].includes(k));
       if (!type) return { type: 'unknown' };
       return { type, value: item[type], antes: item.antes };
     });

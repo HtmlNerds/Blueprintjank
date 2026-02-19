@@ -345,9 +345,9 @@ function cardMatchesClause(card: any, clause: any, anteNum: number, slotIndex: n
 
     // Check card type matches
 
-    if (clause.joker || clause.soulJoker) {
+    if (clause.joker || clause.legendaryJoker) {
 
-        const targetJoker = (clause.joker || clause.soulJoker)?.toLowerCase();
+        const targetJoker = (clause.joker || clause.legendaryJoker)?.toLowerCase();
 
         if (targetJoker === 'any') {
 
@@ -657,7 +657,7 @@ const AnteSection = React.memo(({
 
                                             <Box key={index} style={{ flexShrink: 0, opacity: isInJamlSlot ? 1 : 0.5, transition: 'opacity 0.2s' }}>
 
-                                                <GameCard card={card} glow={glow} scale={cardScale} />
+                                                <GameCard card={{... card, glow, scale: cardScale}} />
 
                                             </Box>
 

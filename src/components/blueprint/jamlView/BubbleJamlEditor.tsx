@@ -208,7 +208,7 @@ export function BubbleJamlEditor({ initialJaml, onJamlChange }: BubbleJamlEditor
     const parseFilters = (items: Array<any>) => {
       if (!Array.isArray(items)) return [];
       return items.map((item: any) => {
-        const type = Object.keys(item).find(k => ['joker', 'soulJoker', 'voucher', 'tarotCard', 'planetCard', 'spectralCard', 'standardCard', 'tag', 'boss'].includes(k));
+        const type = Object.keys(item).find(k => ['joker', 'legendaryJoker', 'voucher', 'tarotCard', 'planetCard', 'spectralCard', 'standardCard', 'tag', 'boss'].includes(k));
         if (!type) return { type: 'unknown' };
         
         return {

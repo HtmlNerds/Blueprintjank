@@ -32,7 +32,7 @@ const STAKES = [
 
 const CLAUSE_TYPES = [
     { value: 'joker', label: 'Joker' },
-    { value: 'soulJoker', label: 'Soul Joker' },
+    { value: 'legendaryJoker', label: 'Soul Joker' },
     { value: 'voucher', label: 'Voucher' },
     { value: 'tarotCard', label: 'Tarot' },
     { value: 'planetCard', label: 'Planet' },
@@ -58,7 +58,7 @@ function clauseToYaml(clause: ClauseRow): Record<string, unknown> {
 
 function yamlToClause(item: any): ClauseRow {
     const type = Object.keys(item || {}).find((k) =>
-        ['joker', 'soulJoker', 'voucher', 'tarotCard', 'planetCard', 'tag', 'boss'].includes(k)
+        ['joker', 'legendaryJoker', 'voucher', 'tarotCard', 'planetCard', 'tag', 'boss'].includes(k)
     );
     const value = type ? (item[type] ?? '') : '';
     const antes = Array.isArray(item?.antes) ? item.antes.join(', ') : '';
