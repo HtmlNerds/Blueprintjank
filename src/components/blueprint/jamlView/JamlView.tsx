@@ -635,179 +635,121 @@ const AnteSection = React.memo(({
 
                 <Box style={{ minWidth: 0, overflow: 'hidden' }}>
 
-                <Collapse in={!collapsed}>
+                    <Collapse in={!collapsed}>
 
-                    <Stack gap={4}>
+                        <Stack gap={4}>
 
-                        {/* Shop row */}
+                            {/* Shop row */}
 
-                        {sourcesConfig.showShop && displayShop.length > 0 && (
+                            {sourcesConfig.showShop && displayShop.length > 0 && (
 
-                            <DragScroll>
+                                <DragScroll>
 
-                                <Group wrap="nowrap" gap={3}>
+                                    <Group wrap="nowrap" gap={3}>
 
-                                    {displayShop.map((card: any, index: number) => {
+                                        {displayShop.map((card: any, index: number) => {
 
-                                        const isInJamlSlot = sourcesConfig.shopSlots.length === 0 || sourcesConfig.shopSlots.includes(index);
+                                            const isInJamlSlot = sourcesConfig.shopSlots.length === 0 || sourcesConfig.shopSlots.includes(index);
 
-                                        const glow = getCardGlow(card, jamlConfig, anteNum, index, 'shop');
+                                            const glow = getCardGlow(card, jamlConfig, anteNum, index, 'shop');
 
-                                        return (
+                                            return (
 
-                                            <Box key={index} style={{ flexShrink: 0, opacity: isInJamlSlot ? 1 : 0.5, transition: 'opacity 0.2s' }}>
+                                                <Box key={index} style={{ flexShrink: 0, opacity: isInJamlSlot ? 1 : 0.5, transition: 'opacity 0.2s' }}>
 
-                                                <GameCard card={{... card, glow, scale: cardScale}} />
+                                                    <GameCard card={{ ...card, glow, scale: cardScale }} />
 
-                                            </Box>
+                                                </Box>
 
-                                        );
+                                            );
 
-                                    })}
+                                        })}
 
-                                </Group>
+                                    </Group>
 
-                            </DragScroll>
+                                </DragScroll>
 
-                        )}
+                            )}
 
 
 
-                        {/* Blind columns */}
+                            {/* Blind columns */}
 
-                        {sourcesConfig.showPacks && (hasBigBlind || hasBossBlind) && (
+                            {sourcesConfig.showPacks && (hasBigBlind || hasBossBlind) && (
 
-                            <Group gap={4} wrap="nowrap" align="stretch" style={{ width: '100%' }}>
+                                <Group gap={4} wrap="nowrap" align="stretch" style={{ width: '100%' }}>
 
-                                {/* SMALL BLIND */}
+                                    {/* SMALL BLIND */}
 
-                                {showSmallBlindColumn && (
+                                    {showSmallBlindColumn && (
 
-                                    <Stack gap={2} justify="flex-end" style={{ flex: 1 }}>
+                                        <Stack gap={2} justify="flex-end" style={{ flex: 1 }}>
 
-                                        {smallBlindPacks.length > 0 && (
+                                            {smallBlindPacks.length > 0 && (
 
-                                            <Stack gap={4} mb="auto">
+                                                <Stack gap={4} mb="auto">
 
-                                                {smallBlindPacks.map((pack: Pack, idx: number) => {
+                                                    {smallBlindPacks.map((pack: Pack, idx: number) => {
 
-                                                    const isInJamlSlots = sourcesConfig.packSlots.length === 0 || sourcesConfig.packSlots.includes(idx);
+                                                        const isInJamlSlots = sourcesConfig.packSlots.length === 0 || sourcesConfig.packSlots.includes(idx);
 
-                                                    return (
+                                                        return (
 
-                                                        <Box key={idx} style={{ opacity: isInJamlSlots ? 1 : 0.5, transition: 'opacity 0.2s' }}>
+                                                            <Box key={idx} style={{ opacity: isInJamlSlots ? 1 : 0.5, transition: 'opacity 0.2s' }}>
 
-                                                            <Group gap={3} mb={2} wrap="nowrap">
+                                                                <Group gap={3} mb={2} wrap="nowrap">
 
-                                                                <Badge size="xs" variant="filled" color="gray">{pack.name}</Badge>
+                                                                    <Badge size="xs" variant="filled" color="gray">{pack.name}</Badge>
 
-                                                                <Badge size="xs" variant="filled" color={pack.choices > 1 ? "green" : "gray"}>Pick {pack.choices}</Badge>
+                                                                    <Badge size="xs" variant="filled" color={pack.choices > 1 ? "green" : "gray"}>Pick {pack.choices}</Badge>
 
-                                                            </Group>
+                                                                </Group>
 
-                                                            <Group wrap="nowrap" gap={2}>
+                                                                <Group wrap="nowrap" gap={2}>
 
-                                                                {pack.cards.map((card, cardIdx) => (
+                                                                    {pack.cards.map((card, cardIdx) => (
 
-                                                                    <GameCard key={cardIdx} card={card} glow={getCardGlow(card, jamlConfig, anteNum, 0, 'pack')} scale={cardScale} />
+                                                                        <GameCard key={cardIdx} card={card} glow={getCardGlow(card, jamlConfig, anteNum, 0, 'pack')} scale={cardScale} />
 
-                                                                ))}
+                                                                    ))}
 
-                                                            </Group>
+                                                                </Group>
 
-                                                        </Box>
+                                                            </Box>
 
-                                                    );
+                                                        );
 
-                                                })}
+                                                    })}
 
-                                            </Stack>
+                                                </Stack>
 
-                                        )}
+                                            )}
 
-                                        <Group gap={4} align="center">
+                                            <Group gap={4} align="center">
 
-                                            {anteData.tags?.[0] && <RenderTag tagName={anteData.tags[0]} />}
+                                                {anteData.tags?.[0] && <RenderTag tagName={anteData.tags[0]} />}
 
-                                            <Text size="xs" fw={600} c="dimmed">Small Blind</Text>
+                                                <Text size="xs" fw={600} c="dimmed">Small Blind</Text>
 
-                                        </Group>
-
-                                    </Stack>
-
-                                )}
-
-
-
-                                {/* BIG BLIND */}
-
-                                <Stack gap={2} justify="flex-end" style={{ flex: 1 }}>
-
-                                    {bigBlindPacks.length > 0 && (
-
-                                        <Stack gap={4} mb="auto">
-
-                                            {bigBlindPacks.map((pack: Pack, idx: number) => {
-
-                                                const isInJamlSlots = sourcesConfig.packSlots.length === 0 || sourcesConfig.packSlots.includes(idx + 2);
-
-                                                return (
-
-                                                    <Box key={idx} style={{ opacity: isInJamlSlots ? 1 : 0.5, transition: 'opacity 0.2s' }}>
-
-                                                        <Group gap={3} mb={2} wrap="nowrap">
-
-                                                            <Badge size="xs" variant="filled" color="gray">{pack.name}</Badge>
-
-                                                            <Badge size="xs" variant="filled" color={pack.choices > 1 ? "green" : "gray"}>Pick {pack.choices}</Badge>
-
-                                                        </Group>
-
-                                                        <Group wrap="nowrap" gap={2}>
-
-                                                            {pack.cards.map((card, cardIdx) => (
-
-                                                                <GameCard key={cardIdx} card={card} glow={getCardGlow(card, jamlConfig, anteNum, 1, 'pack')} scale={cardScale} />
-
-                                                            ))}
-
-                                                        </Group>
-
-                                                    </Box>
-
-                                                );
-
-                                            })}
+                                            </Group>
 
                                         </Stack>
 
                                     )}
 
-                                    <Group gap={4} align="center">
-
-                                        {anteData.tags?.[1] && <RenderTag tagName={anteData.tags[1]} />}
-
-                                        <Text size="xs" fw={600} c="dimmed">Big Blind</Text>
-
-                                    </Group>
-
-                                </Stack>
 
 
-
-                                {/* BOSS BLIND */}
-
-                                {hasBossBlind && (
+                                    {/* BIG BLIND */}
 
                                     <Stack gap={2} justify="flex-end" style={{ flex: 1 }}>
 
-                                        {bossBlindPacks.length > 0 && (
+                                        {bigBlindPacks.length > 0 && (
 
                                             <Stack gap={4} mb="auto">
 
-                                                {bossBlindPacks.map((pack: Pack, idx: number) => {
+                                                {bigBlindPacks.map((pack: Pack, idx: number) => {
 
-                                                    const isInJamlSlots = sourcesConfig.packSlots.length === 0 || sourcesConfig.packSlots.includes(idx + 4);
+                                                    const isInJamlSlots = sourcesConfig.packSlots.length === 0 || sourcesConfig.packSlots.includes(idx + 2);
 
                                                     return (
 
@@ -825,7 +767,7 @@ const AnteSection = React.memo(({
 
                                                                 {pack.cards.map((card, cardIdx) => (
 
-                                                                    <GameCard key={cardIdx} card={card} glow={getCardGlow(card, jamlConfig, anteNum, 2, 'pack')} scale={cardScale} />
+                                                                    <GameCard key={cardIdx} card={card} glow={getCardGlow(card, jamlConfig, anteNum, 1, 'pack')} scale={cardScale} />
 
                                                                 ))}
 
@@ -843,89 +785,147 @@ const AnteSection = React.memo(({
 
                                         <Group gap={4} align="center">
 
-                                            {anteData.boss && <Boss bossName={anteData.boss} />}
+                                            {anteData.tags?.[1] && <RenderTag tagName={anteData.tags[1]} />}
 
-                                            <Text size="xs" fw={600} c="dimmed">Boss Blind</Text>
+                                            <Text size="xs" fw={600} c="dimmed">Big Blind</Text>
 
                                         </Group>
 
                                     </Stack>
 
-                                )}
-
-                            </Group>
-
-                        )}
 
 
+                                    {/* BOSS BLIND */}
 
-                        {/* Misc sources from JAML */}
+                                    {hasBossBlind && (
 
-                        {sourcesConfig.miscSources.length > 0 && (
+                                        <Stack gap={2} justify="flex-end" style={{ flex: 1 }}>
 
-                            <Group gap={4} wrap="nowrap">
+                                            {bossBlindPacks.length > 0 && (
 
-                                {sourcesConfig.miscSources.map(source => (
+                                                <Stack gap={4} mb="auto">
 
-                                    <Badge key={source} size="xs" variant="outline">{source}</Badge>
+                                                    {bossBlindPacks.map((pack: Pack, idx: number) => {
 
-                                ))}
+                                                        const isInJamlSlots = sourcesConfig.packSlots.length === 0 || sourcesConfig.packSlots.includes(idx + 4);
 
-                            </Group>
+                                                        return (
 
-                        )}
+                                                            <Box key={idx} style={{ opacity: isInJamlSlots ? 1 : 0.5, transition: 'opacity 0.2s' }}>
+
+                                                                <Group gap={3} mb={2} wrap="nowrap">
+
+                                                                    <Badge size="xs" variant="filled" color="gray">{pack.name}</Badge>
+
+                                                                    <Badge size="xs" variant="filled" color={pack.choices > 1 ? "green" : "gray"}>Pick {pack.choices}</Badge>
+
+                                                                </Group>
+
+                                                                <Group wrap="nowrap" gap={2}>
+
+                                                                    {pack.cards.map((card, cardIdx) => (
+
+                                                                        <GameCard key={cardIdx} card={card} glow={getCardGlow(card, jamlConfig, anteNum, 2, 'pack')} scale={cardScale} />
+
+                                                                    ))}
+
+                                                                </Group>
+
+                                                            </Box>
+
+                                                        );
+
+                                                    })}
+
+                                                </Stack>
+
+                                            )}
+
+                                            <Group gap={4} align="center">
+
+                                                {anteData.boss && <Boss bossName={anteData.boss} />}
+
+                                                <Text size="xs" fw={600} c="dimmed">Boss Blind</Text>
+
+                                            </Group>
+
+                                        </Stack>
+
+                                    )}
+
+                                </Group>
+
+                            )}
 
 
 
-                        {/* Custom Layout Sources */}
+                            {/* Misc sources from JAML */}
 
-                        {customSources.length > 0 && (
+                            {sourcesConfig.miscSources.length > 0 && (
 
-                            <Stack gap={4}>
+                                <Group gap={4} wrap="nowrap">
 
-                                {customSources.map((source, idx) => (
+                                    {sourcesConfig.miscSources.map(source => (
 
-                                    <Box key={`${source.sourceType}-${source.sourceName}-${idx}`}>
+                                        <Badge key={source} size="xs" variant="outline">{source}</Badge>
 
-                                        <Badge size="xs" variant="filled" color="blue" mb={2}>
+                                    ))}
 
-                                            {source.sourceName} ({source.sourceType})
+                                </Group>
 
-                                        </Badge>
+                            )}
 
-                                        {source.cards && source.cards.length > 0 && (
 
-                                            <DragScroll>
 
-                                                <Group wrap="nowrap" gap={3}>
+                            {/* Custom Layout Sources */}
 
-                                                    {source.cards.map((card: any, cardIdx: number) => (
+                            {customSources.length > 0 && (
 
-                                                        <Box key={cardIdx} style={{ flexShrink: 0 }}>
+                                <Stack gap={4}>
 
-                                                            <GameCard card={card} scale={cardScale} />
+                                    {customSources.map((source, idx) => (
 
-                                                        </Box>
+                                        <Box key={`${source.sourceType}-${source.sourceName}-${idx}`}>
 
-                                                    ))}
+                                            <Badge size="xs" variant="filled" color="blue" mb={2}>
 
-                                                </Group>
+                                                {source.sourceName} ({source.sourceType})
 
-                                            </DragScroll>
+                                            </Badge>
 
-                                        )}
+                                            {source.cards && source.cards.length > 0 && (
 
-                                    </Box>
+                                                <DragScroll>
 
-                                ))}
+                                                    <Group wrap="nowrap" gap={3}>
 
-                            </Stack>
+                                                        {source.cards.map((card: any, cardIdx: number) => (
 
-                        )}
+                                                            <Box key={cardIdx} style={{ flexShrink: 0 }}>
 
-                    </Stack>
+                                                                <GameCard card={card} scale={cardScale} />
 
-                </Collapse>
+                                                            </Box>
+
+                                                        ))}
+
+                                                    </Group>
+
+                                                </DragScroll>
+
+                                            )}
+
+                                        </Box>
+
+                                    ))}
+
+                                </Stack>
+
+                            )}
+
+                        </Stack>
+
+                    </Collapse>
 
                 </Box>
 
@@ -1514,9 +1514,9 @@ function JamlView() {
 
                 const hitsPerSec = elapsedS > 0 ? (hits / elapsedS).toFixed(2) : '0';
 
-                
 
-                wasmProgressElRef.current.textContent = 
+
+                wasmProgressElRef.current.textContent =
 
                     `${searched.toLocaleString()} seeds \u2022 ${hits.toLocaleString()} hits (${hitsPerSec} h/s) \u2022 ${speed.toLocaleString()} s/s \u2022 ${elapsedS.toFixed(1)}s \u2022 ${wasmThreadCount}w`;
 
@@ -1564,7 +1564,7 @@ function JamlView() {
 
                 const speed = elapsedS > 0 ? Math.round(searched / elapsedS) : 0;
 
-                 
+
 
                 console.log('[MotelySearchPerf]', {
 
@@ -1613,7 +1613,7 @@ function JamlView() {
             // Single WASM instance search — .NET threading via WasmEnableThreads
             const finalStatus = await startJamlSearchWasm(jamlText, {
                 threadCount: wasmThreadCount > 0 ? wasmThreadCount : defaultThreads,
-                batchSize: wasmBatchSize,
+                batchCharCount: wasmBatchSize,
                 palindrome: (searchMode === 'funny' && funnyMode === 'palindrome') ? true : undefined,
             }, {
                 onProgress: (totalSeedsSearched: number, _matchingSeeds: number, elapsedMs: number, resultCount: number) => {
@@ -1656,7 +1656,7 @@ function JamlView() {
                 const searched = wasmSeedsSearchedRef.current;
                 const elapsedS = wasmElapsedMsRef.current / 1000;
                 const speed = elapsedS > 0 ? Math.round(searched / elapsedS) : 0;
-                 
+
                 console.log('[MotelySearchPerf][final]', {
                     workerCount: wasmThreadCount,
                     speedSeedsPerSec: speed,
@@ -1718,9 +1718,9 @@ function JamlView() {
 
     const handleWasmStop = useCallback(() => {
         const timerId = wasmProgressTimerRef.current;
-        if (timerId) { 
-            clearInterval(timerId); 
-            wasmProgressTimerRef.current = null; 
+        if (timerId) {
+            clearInterval(timerId);
+            wasmProgressTimerRef.current = null;
         }
 
         const el = wasmProgressElRef.current;
@@ -1730,7 +1730,7 @@ function JamlView() {
             const elapsedS = wasmElapsedMsRef.current / 1000;
             const speed = elapsedS > 0 ? Math.round(searched / elapsedS) : 0;
 
-            el.textContent = 
+            el.textContent =
                 `${searched.toLocaleString()} seeds \u2022 ${hits.toLocaleString()} hits \u2022 ${speed.toLocaleString()} s/s \u2022 ${elapsedS.toFixed(1)}s (stopped)`;
         }
 
@@ -1748,7 +1748,7 @@ function JamlView() {
 
         // Cancel the running WASM search
         if (wasmSearchIdRef.current) {
-            cancelSearchWasm().catch(() => {});
+            cancelSearchWasm().catch(() => { });
             wasmSearchIdRef.current = null;
         }
 
@@ -2416,7 +2416,7 @@ function JamlView() {
 
                             const text = wasmResults.map(r => r.seed).join('\n');
 
-                            navigator.clipboard.writeText(text).catch(() => {});
+                            navigator.clipboard.writeText(text).catch(() => { });
 
                         }}
 
