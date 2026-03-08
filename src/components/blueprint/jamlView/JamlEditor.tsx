@@ -38,12 +38,12 @@ must:
   #   - RULE: The FIRST booster pack in a shop is ALWAYS a 2-joker, $4 bufoon pack.
   - joker: Any
     antes: [1]
-    packSlots: [0]
+    boosterPacks: [0]
 should:
   - joker: Blueprint
     antes: [1, 2, 3, 4, 5, 6, 7, 8]
-    packSlots: [0, 1, 2, 3, 4, 5]
-    shopSlots: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
+    boosterPacks: [0, 1, 2, 3, 4, 5]
+    shopItems: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
 seeds:
   - "PIFREAK"
   - "LOVESYOU"
@@ -71,8 +71,8 @@ export function JamlEditor({ onJamlChange, initialJaml }: JamlEditorProps) {
             const parsed = yaml.load(jamlText);
             return { isValid: true, parsed };
         } catch (e: any) {
-            return { 
-                isValid: false, 
+            return {
+                isValid: false,
                 error: e.message || 'Invalid JAML syntax'
             };
         }
@@ -110,7 +110,7 @@ export function JamlEditor({ onJamlChange, initialJaml }: JamlEditorProps) {
             reader.readAsText(file);
         }
     }, []);
-    
+
     const handlePasteFromClipboard = useCallback(async () => {
         try {
             const text = await navigator.clipboard.readText();

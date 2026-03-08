@@ -39,12 +39,12 @@ must:
   #   - RULE: The FIRST booster pack in a shop is ALWAYS a 2-joker, $4 bufoon pack.
   - joker: Any
     antes: [1]
-    packSlots: [0]
+    boosterPacks: [0]
 should:
   - joker: Blueprint
     antes: [1, 2, 3, 4, 5, 6, 7, 8]
-    packSlots: [0, 1, 2, 3, 4, 5]
-    shopSlots: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
+    boosterPacks: [0, 1, 2, 3, 4, 5]
+    shopItems: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
 seeds:
   - "PIFREAK"
   - "LOVESYOU"
@@ -137,11 +137,11 @@ function extractSourcesFromJaml(jamlConfig: any): {
 
     showShop: boolean;
 
-    shopSlots: Array<number>;
+    shopItems: Array<number>;
 
     showPacks: boolean;
 
-    packSlots: Array<number>;
+    boosterPacks: Array<number>;
 
     showVoucher: boolean;
 
@@ -153,11 +153,11 @@ function extractSourcesFromJaml(jamlConfig: any): {
 
         showShop: false,
 
-        shopSlots: [] as Array<number>,
+        shopItems: [] as Array<number>,
 
         showPacks: false,
 
-        packSlots: [] as Array<number>,
+        boosterPacks: [] as Array<number>,
 
         showVoucher: false,
 
@@ -191,17 +191,17 @@ function extractSourcesFromJaml(jamlConfig: any): {
 
 
 
-            // Check for shopSlots at clause level
+            // Check for shopItems at clause level
 
-            if (clause.shopSlots && clause.shopSlots.length > 0) {
+            if (clause.shopItems && clause.shopItems.length > 0) {
 
                 result.showShop = true;
 
                 foundAnySource = true;
 
-                clause.shopSlots.forEach((s: number) => {
+                clause.shopItems.forEach((s: number) => {
 
-                    if (!result.shopSlots.includes(s)) result.shopSlots.push(s);
+                    if (!result.shopItems.includes(s)) result.shopItems.push(s);
 
                 });
 
@@ -209,17 +209,17 @@ function extractSourcesFromJaml(jamlConfig: any): {
 
 
 
-            // Check for packSlots at clause level
+            // Check for boosterPacks at clause level
 
-            if (clause.packSlots && clause.packSlots.length > 0) {
+            if (clause.boosterPacks && clause.boosterPacks.length > 0) {
 
                 result.showPacks = true;
 
                 foundAnySource = true;
 
-                clause.packSlots.forEach((s: number) => {
+                clause.boosterPacks.forEach((s: number) => {
 
-                    if (!result.packSlots.includes(s)) result.packSlots.push(s);
+                    if (!result.boosterPacks.includes(s)) result.boosterPacks.push(s);
 
                 });
 
@@ -231,29 +231,29 @@ function extractSourcesFromJaml(jamlConfig: any): {
 
             if (sources) {
 
-                if (sources.shopSlots && sources.shopSlots.length > 0) {
+                if (sources.shopItems && sources.shopItems.length > 0) {
 
                     result.showShop = true;
 
                     foundAnySource = true;
 
-                    sources.shopSlots.forEach((s: number) => {
+                    sources.shopItems.forEach((s: number) => {
 
-                        if (!result.shopSlots.includes(s)) result.shopSlots.push(s);
+                        if (!result.shopItems.includes(s)) result.shopItems.push(s);
 
                     });
 
                 }
 
-                if (sources.packSlots && sources.packSlots.length > 0) {
+                if (sources.boosterPacks && sources.boosterPacks.length > 0) {
 
                     result.showPacks = true;
 
                     foundAnySource = true;
 
-                    sources.packSlots.forEach((s: number) => {
+                    sources.boosterPacks.forEach((s: number) => {
 
-                        if (!result.packSlots.includes(s)) result.packSlots.push(s);
+                        if (!result.boosterPacks.includes(s)) result.boosterPacks.push(s);
 
                     });
 
@@ -307,9 +307,9 @@ function extractSourcesFromJaml(jamlConfig: any): {
 
 
 
-    result.shopSlots.sort((a, b) => a - b);
+    result.shopItems.sort((a, b) => a - b);
 
-    result.packSlots.sort((a, b) => a - b);
+    result.boosterPacks.sort((a, b) => a - b);
 
 
 
@@ -331,9 +331,9 @@ function cardMatchesClause(card: any, clause: any, anteNum: number, slotIndex: n
 
     // Check slot constraint
 
-    if (slotType === 'shop' && clause.shopSlots && !clause.shopSlots.includes(slotIndex)) return false;
+    if (slotType === 'shop' && clause.shopItems && !clause.shopItems.includes(slotIndex)) return false;
 
-    if (slotType === 'pack' && clause.packSlots && !clause.packSlots.includes(slotIndex)) return false;
+    if (slotType === 'pack' && clause.boosterPacks && !clause.boosterPacks.includes(slotIndex)) return false;
 
 
 
@@ -649,7 +649,7 @@ const AnteSection = React.memo(({
 
                                         {displayShop.map((card: any, index: number) => {
 
-                                            const isInJamlSlot = sourcesConfig.shopSlots.length === 0 || sourcesConfig.shopSlots.includes(index);
+                                            const isInJamlSlot = sourcesConfig.shopItems.length === 0 || sourcesConfig.shopItems.includes(index);
 
                                             const glow = getCardGlow(card, jamlConfig, anteNum, index, 'shop');
 
@@ -691,7 +691,7 @@ const AnteSection = React.memo(({
 
                                                     {smallBlindPacks.map((pack: Pack, idx: number) => {
 
-                                                        const isInJamlSlots = sourcesConfig.packSlots.length === 0 || sourcesConfig.packSlots.includes(idx);
+                                                        const isInJamlSlots = sourcesConfig.boosterPacks.length === 0 || sourcesConfig.boosterPacks.includes(idx);
 
                                                         return (
 
@@ -749,7 +749,7 @@ const AnteSection = React.memo(({
 
                                                 {bigBlindPacks.map((pack: Pack, idx: number) => {
 
-                                                    const isInJamlSlots = sourcesConfig.packSlots.length === 0 || sourcesConfig.packSlots.includes(idx + 2);
+                                                    const isInJamlSlots = sourcesConfig.boosterPacks.length === 0 || sourcesConfig.boosterPacks.includes(idx + 2);
 
                                                     return (
 
@@ -807,7 +807,7 @@ const AnteSection = React.memo(({
 
                                                     {bossBlindPacks.map((pack: Pack, idx: number) => {
 
-                                                        const isInJamlSlots = sourcesConfig.packSlots.length === 0 || sourcesConfig.packSlots.includes(idx + 4);
+                                                        const isInJamlSlots = sourcesConfig.boosterPacks.length === 0 || sourcesConfig.boosterPacks.includes(idx + 4);
 
                                                         return (
 
@@ -1784,11 +1784,11 @@ function JamlView() {
 
                 showShop: true,
 
-                shopSlots: [],
+                shopItems: [],
 
                 showPacks: true,
 
-                packSlots: [],
+                boosterPacks: [],
 
                 showVoucher: true,
 
