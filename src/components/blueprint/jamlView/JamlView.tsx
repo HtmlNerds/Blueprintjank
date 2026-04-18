@@ -1068,14 +1068,14 @@ function JamlView() {
 
                 {/* Center: Seed Add + Navigation */}
                 <Group gap={4}>
-                    <ActionIcon variant="subtle" size="xs" onClick={goToPrevSeed} disabled={currentSeedIndex === 0 || seeds.length <= 1} title="Prev seed (←)">
-                        <IconChevronLeft size={14} />
+                    <ActionIcon variant="subtle" size="lg" onClick={goToPrevSeed} disabled={currentSeedIndex === 0 || seeds.length <= 1} title="Prev seed (←)">
+                        <IconChevronLeft size={22} />
                     </ActionIcon>
                     <TextInput
                         placeholder="Add seed..."
                         size="xs"
                         w={120}
-                        styles={{ input: { fontFamily: 'monospace', fontSize: 'var(--mantine-font-size-xs)', height: '22px', minHeight: '22px' } }}
+                        styles={{ input: { fontFamily: 'monospace', fontSize: '16px', height: '32px', minHeight: '32px' } }}
                         onKeyDown={(e) => {
                             if (e.key === 'Enter') {
                                 const val = e.currentTarget.value.trim().toUpperCase();
@@ -1105,8 +1105,8 @@ function JamlView() {
                             <>{seeds[currentSeedIndex]} <Text span c="dimmed" fz={10}>{currentSeedIndex + 1}/{seeds.length}</Text></>
                         ) : 'No seeds'}
                     </Text>
-                    <ActionIcon variant="subtle" size="xs" onClick={goToNextSeed} disabled={currentSeedIndex >= seeds.length - 1 || seeds.length <= 1} title="Next seed (→)">
-                        <IconChevronRight size={14} />
+                    <ActionIcon variant="subtle" size="lg" onClick={goToNextSeed} disabled={currentSeedIndex >= seeds.length - 1 || seeds.length <= 1} title="Next seed (→)">
+                        <IconChevronRight size={22} />
                     </ActionIcon>
                 </Group>
 
@@ -1292,7 +1292,7 @@ function JamlView() {
                                 fontFamily: 'monospace',
                                 backgroundColor: theme.colors.dark[7],
                                 color: theme.colors.gray[3],
-                                fontSize: '14px',
+                                fontSize: '16px',
                                 letterSpacing: '0.5px',
                                 transition: 'background-color 0.15s, border-color 0.15s',
                             }
