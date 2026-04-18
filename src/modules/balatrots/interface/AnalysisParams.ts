@@ -1,11 +1,11 @@
-import { Deck } from "../enum/Deck";
-import { Stake } from "../enum/Stake";
-import { Version } from "../enum/Version";
+import type { Deck } from "../enum/Deck";
+import type { Stake } from "../enum/Stake";
+import type { Version } from "../enum/Version";
 
 export interface AnalysisParams {
     seed: string;
     ante: number;
-    cardsPerAnte: number[];
+    cardsPerAnte: Array<number>;
     deck: Deck;
     stake: Stake;
     version: Version;

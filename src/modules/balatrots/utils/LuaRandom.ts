@@ -5,7 +5,7 @@ const MASK_64 = 0xFFFFFFFFFFFFFFFFn; // 64-bit mask
 
 export class LuaRandom {
     seed: number;
-    state: bigint[];
+    state: Array<bigint>;
 
     constructor(seed: number = 0.0) {
         this.state = [0n, 0n, 0n, 0n];

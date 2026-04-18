@@ -1,7 +1,7 @@
-import { JokerImpl } from "./interface/Joker";
-import { JokerData } from "./struct/JokerData";
+import type { JokerImpl } from "./interface/Joker";
+import type { JokerData } from "./struct/JokerData";
 
-//todo implement all elements besides jokers
+// todo implement all elements besides jokers
 export class Run {
     jokers = new Set<string>();
     legendary_jokers = new Set<JokerImpl>();

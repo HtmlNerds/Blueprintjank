@@ -1,7 +1,7 @@
-import React, {useState, useRef} from "react";
-import { Autocomplete, Box, Button, Group, NativeSelect, Paper } from "@mantine/core";
+import React, {useRef, useState} from "react";
+import { Autocomplete, Button, Group, NativeSelect, Paper } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
-import {popularSeeds, SeedsWithLegendary} from "../modules/const.ts";
+import {SeedsWithLegendary, popularSeeds} from "../modules/const.ts";
 import {useCardStore} from "../modules/state/store.ts";
 import {sanitizeSeed} from "../modules/utils.ts";
 
@@ -30,10 +30,11 @@ function SeedInputAutoComplete({ seed, setSeed, w, showDeckSelect, label = 'Seed
     const [localSeed, setLocalSeed] = useState(seed);
     const isDirty = useRef(false);
 
-    // Sync from store when not actively editing
-    if (!isDirty.current && localSeed !== seed) {
-        setLocalSeed(seed);
-    }
+    React.useEffect(() => {
+        if (!isDirty.current && localSeed !== seed) {
+            setLocalSeed(seed);
+        }
+    }, [seed, localSeed]);
 
     const debouncedSetSeed = useDebouncedCallback((value: string) => {
         setLocalSeed(sanitizeSeed(value));
@@ -41,9 +42,8 @@ function SeedInputAutoComplete({ seed, setSeed, w, showDeckSelect, label = 'Seed
         isDirty.current = false;
     }, 160);
 
-    const deck = useCardStore(state => state.engineState.deck);
+    const deck = useCardStore(state => state.immolateState.deck);
     const setDeck = useCardStore(state => state.setDeck);
-    const setStart = useCardStore(state => state.setStart);
 
     const sectionWidth = 130;
     const deckSelect = showDeckSelect ? (
@@ -93,20 +93,19 @@ function SeedInputAutoComplete({ seed, setSeed, w, showDeckSelect, label = 'Seed
                 setLocalSeed(value);
                 if (allSuggestions.includes(value)) {
                     setSeed(value);
-                    isDirty.current = true;
-                    setStart(true);
+                    isDirty.current = false;
                 } else {
                     debouncedSetSeed(value);
                 }
             }}
-            rightSection={showDeckSelect ? deckSelect : undefined}
+            rightSection={deckSelect}
             rightSectionWidth={showDeckSelect ? sectionWidth : undefined}
         />
     );
 }
 
 export function QuickAnalyze() {
-    const seed = useCardStore(state => state.engineState.seed);
+    const seed = useCardStore(state => state.immolateState.seed);
     const setSeed = useCardStore(state => state.setSeed);
     const setStart = useCardStore(state => state.setStart);
 

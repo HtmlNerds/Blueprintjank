@@ -1,8 +1,8 @@
-import { ItemImpl } from '../interface/Item';
+import type { ItemImpl } from '../interface/Item';
 // import { SearchableItem } from '../interface/SearchableItem';
 
 export class ShopQueue extends Array<any> {
-    constructor(items?: any[]) {
+    constructor(items?: Array<any>) {
         super();
         if (items) {
             this.push(...items);

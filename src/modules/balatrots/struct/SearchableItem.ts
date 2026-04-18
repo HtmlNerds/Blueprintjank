@@ -1,5 +1,6 @@
-import { ItemImpl } from '../interface/Item';
-import { Edition, EditionItem } from '../enum/Edition';
+import { Edition } from '../enum/Edition';
+import type { ItemImpl } from '../interface/Item';
+import type { EditionItem } from '../enum/Edition';
 
 export class SearchableItem {
     constructor(

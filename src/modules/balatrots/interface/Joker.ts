@@ -1,16 +1,15 @@
-import { Filter } from "./Filter";
-import { Item } from "./Item";
 import { JokerType } from "../enum/JokerType";
+import type { Filter } from "./Filter";
+import type { Item } from "./Item";
 
 export interface Joker extends Item {
     // Method overload signatures
-    inBuffonPack(): Filter;
-    inBuffonPack(ante: number): Filter;
-    getType(): JokerType;
-    isRare(): boolean;
-    isCommon(): boolean;
-    isUncommon(): boolean;
-    isLegendary(): boolean;
+    inBuffonPack: (() => Filter) & ((ante: number) => Filter);
+    getType: () => JokerType;
+    isRare: () => boolean;
+    isCommon: () => boolean;
+    isUncommon: () => boolean;
+    isLegendary: () => boolean;
 }
 
 export class JokerImpl implements Joker {

@@ -1,4 +1,4 @@
-import { Run } from "./Run";
+import type { Run } from "./Run";
 
 export class Filter {
 

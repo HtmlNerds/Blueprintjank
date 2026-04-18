@@ -1,5 +1,5 @@
-import { useCardStore } from "../modules/state/store.ts";
 import { Button, Container, Group, Modal, SimpleGrid, Switch } from "@mantine/core";
+import { useCardStore } from "../modules/state/store.ts";
 import { options } from "../modules/const.ts";
 
 export default function UnlocksModal() {

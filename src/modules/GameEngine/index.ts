@@ -1,20 +1,21 @@
 import { EVENT_UNLOCKS, LOCATIONS, options } from "../const.ts";
-import { RandomQueueNames, RNGSource } from "../balatrots/enum/QueueName.ts";
+import { RNGSource, RandomQueueNames } from "../balatrots/enum/QueueName.ts";
 import { Deck, deckMap } from "../balatrots/enum/Deck.ts";
-import type { StakeType } from "../balatrots/enum/Stake.ts";
 import { Stake } from "../balatrots/enum/Stake.ts";
 import { Game } from "../balatrots/Game.ts";
 import { InstanceParams } from "../balatrots/struct/InstanceParams.ts";
 import { JokerData } from "../balatrots/struct/JokerData.ts";
 import { Type } from "../balatrots/enum/cards/CardType.ts";
-import { Card, PlayingCard } from "../balatrots/enum/cards/Card.ts";
+import { Card } from "../balatrots/enum/cards/Card.ts";
 import { PlanetItem } from "../balatrots/enum/cards/Planet.ts";
 import { Tarot } from "../balatrots/enum/cards/Tarot.ts";
 import { SpectralItem } from "../balatrots/enum/packs/Spectral.ts";
 import { SpecialsItem } from "../balatrots/enum/cards/Specials.ts";
 import { BalatroAnalyzer } from "../balatrots/BalatroAnalyzer.ts";
 import { Lock } from "../balatrots/Lock.ts"
-import type { BoosterPack, Card_Final, Consumables_Final, NextShopItem, PackCard } from "./CardEngines/Cards.ts";
+import { EditionItem } from "../balatrots/enum/Edition.ts";
+import { SealItem } from "../balatrots/enum/Seal.ts";
+import {sanitizeSeed} from "../utils.ts";
 import {
     Ante,
     Joker_Final,
@@ -25,12 +26,15 @@ import {
     StandardCard_Final,
     Tarot_Final
 } from "./CardEngines/Cards.ts";
+import type { BoosterPack, Card_Final, Consumables_Final, NextShopItem, PackCard } from "./CardEngines/Cards.ts";
 
 import type { Voucher } from "../balatrots/enum/Voucher.ts";
-import { Edition, EditionItem } from "../balatrots/enum/Edition.ts";
-import { Seal, SealItem } from "../balatrots/enum/Seal.ts";
+import type { Edition} from "../balatrots/enum/Edition.ts";
+import type { Seal} from "../balatrots/enum/Seal.ts";
 import type { DeckCard } from "../deckUtils.ts";
-import {sanitizeSeed} from "../utils.ts";
+
+import type { PlayingCard } from "../balatrots/enum/cards/Card.ts";
+import type { StakeType } from "../balatrots/enum/Stake.ts";
 
 export type SpoilableItems = "The Soul" | "Judgement" | "Wraith";
 export interface MiscCardSource {
@@ -309,8 +313,7 @@ export interface AnalyzeSettings {
     deck: string;
     stake: string;
     gameVersion: string;
-    minAnte: number;
-    maxAnte: number;
+    antes: number;
     cardsPerAnte: number;
 }
 
@@ -490,12 +493,15 @@ export const getMiscCardSources: (maxCards: number) => Array<MiscCardSource> = (
     ])
 };
 
-export function analyzeSeed(settings: AnalyzeSettings, analyzeOptions: AnalyzeOptions): SeedResultsContainer | undefined {
+export function analyzeSeed(settings: AnalyzeSettings, analyzeOptions: AnalyzeOptions) {
 
     const seed = sanitizeSeed(settings.seed);
 
     if (!seed) return;
-
+    // Sanitize antes coming from settings (could be null/NaN/0 if UI or URL provided empty value)
+    const parsedAntes = Number(settings.antes);
+    const safeAntes = Number.isFinite(parsedAntes) ? Math.floor(parsedAntes) : 1;
+    const maxAntes = Math.max(1, safeAntes);
 
     const output = new SeedResultsContainer();
     const deck = new Deck(deckMap[settings.deck])
@@ -553,9 +559,6 @@ export function analyzeSeed(settings: AnalyzeSettings, analyzeOptions: AnalyzeOp
     const staticAnteQueues = {};
 
     function generateAnte(ante: number) {
-        const maxCards = analyzeOptions?.maxMiscCardSource ?? 15;
-        const miscCardSources = getMiscCardSources(maxCards);
-
         engine.initUnlocks(ante, false);
         const burnerInstance = new Game(
             seed,
@@ -660,6 +663,8 @@ export function analyzeSeed(settings: AnalyzeSettings, analyzeOptions: AnalyzeOp
                 }
             }
         }
+        const maxCards = analyzeOptions?.maxMiscCardSource ?? 15
+        const miscCardSources = getMiscCardSources(maxCards);
 
         const updates = analyzeOptions?.updates;
         if (updates) {
@@ -799,17 +804,14 @@ export function analyzeSeed(settings: AnalyzeSettings, analyzeOptions: AnalyzeOp
     }
 
 
-    const startAnte = settings.minAnte === 0 ? 1 : settings.minAnte;
-    for (let ante = startAnte; ante <= settings.maxAnte; ante++) {
+    for (let ante = 1; ante <= maxAntes; ante++) {
         output.antes[ante] = generateAnte(ante);
     }
-    if (settings.minAnte === 0) {
-        try {
-            output.antes[0] = generateAnte(0)
-            output.antes[0].boss = output.antes[1].boss;
-        } catch (e) {
-            console.error("Error generating ante 0:", e);
-        }
+    try {
+        output.antes[0] = generateAnte(0)
+        output.antes[0].boss = output.antes[1].boss;
+    } catch (e) {
+        console.error("Error generating ante 0:", e);
     }
 
     return output;

@@ -1,8 +1,8 @@
-import { ItemImpl } from '../interface/Item';
 import { Type } from '../enum/cards/CardType';
-import { TarotEnum, Tarot } from '../enum/cards/Tarot';
+import { Tarot, TarotEnum } from '../enum/cards/Tarot';
 import { JokerData } from './JokerData';
-import { JokerImpl } from '../interface/Joker';
+import type { JokerImpl } from '../interface/Joker';
+import type { ItemImpl } from '../interface/Item';
 
 export class ShopItem {
     constructor(

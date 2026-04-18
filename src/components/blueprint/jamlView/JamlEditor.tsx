@@ -1,55 +1,52 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
+    ActionIcon,
+    Alert,
+    Badge,
+    CopyButton,
     Group,
+    Paper,
+    SegmentedControl,
     Stack,
     Text,
     Textarea,
-    Paper,
-    Badge,
     Tooltip,
-    ActionIcon,
-    Alert,
-    CopyButton,
-    SegmentedControl,
-    useMantineTheme
+    useMantineTheme,
 } from '@mantine/core';
-import { 
-    IconUpload, 
-    IconDownload, 
-    IconRefresh,
-    IconCheck,
-    IconCopy,
+import {
     IconAlertCircle,
+    IconCheck,
+    IconClipboard,
+    IconCopy,
+    IconDownload,
     IconFileText,
-    IconClipboard
+    IconRefresh,
+    IconUpload,
 } from '@tabler/icons-react';
 import yaml from 'js-yaml';
-import { InteractiveJamlEditor } from './InteractiveJamlEditor';
+import { JamlConfigurator } from './JamlConfigurator';
 
-// Default JAML template - Trickeoglyph example
-const DEFAULT_JAML = `# Egg.jaml
-name: EGG!
-author: The Egg Man
-description: I love Eggs
-deck: Ghost
+// Default JAML template - loads from default.jaml
+const DEFAULT_JAML = `# Default.jaml
+name: Default JAML file, good for a generic test filter, or for a JAML Map View.
+author: pifreak
+description: A fast SIMD filter for Balatro Seeds.
+deck: Red
 stake: White
-
 must:
-  - soulJoker: Any
+  # This is literally *always* true in Balatro
+  #   - RULE: The FIRST booster pack in a shop is ALWAYS a 2-joker, $4 bufoon pack.
+  - joker: Any
     antes: [1]
-    sources:
-      packSlots: [1]
-    edition: Negative
-  - joker: Showman
-    antes: [1]
-    sources:
-      packSlots: [0]
+    boosterPacks: [0]
 should:
-  - joker: Egg
-    antes: [1,2]
-    sources:
-      packSlots: [0,1]
-      shopSlots: [0,1,2,3,4,5]
+  - joker: Blueprint
+    antes: [1, 2, 3, 4, 5, 6, 7, 8]
+    boosterPacks: [0, 1, 2, 3, 4, 5]
+    shopItems: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
+seeds:
+  - "PIFREAK"
+  - "LOVESYOU"
 `;
 
 interface JamlEditorProps {
@@ -66,7 +63,7 @@ interface ValidationResult {
 export function JamlEditor({ onJamlChange, initialJaml }: JamlEditorProps) {
     const theme = useMantineTheme();
     const [jamlText, setJamlText] = useState<string>(initialJaml || DEFAULT_JAML);
-    const [editorMode, setEditorMode] = useState<'text' | 'interactive'>('interactive');
+    const [editorMode, setEditorMode] = useState<'form' | 'text'>('form');
 
     // Validate and parse JAML
     const validation = useMemo((): ValidationResult => {
@@ -74,9 +71,9 @@ export function JamlEditor({ onJamlChange, initialJaml }: JamlEditorProps) {
             const parsed = yaml.load(jamlText);
             return { isValid: true, parsed };
         } catch (e: any) {
-            return { 
-                isValid: false, 
-                error: e.message || 'Invalid YAML syntax'
+            return {
+                isValid: false,
+                error: e.message || 'Invalid JAML syntax'
             };
         }
     }, [jamlText]);
@@ -113,7 +110,7 @@ export function JamlEditor({ onJamlChange, initialJaml }: JamlEditorProps) {
             reader.readAsText(file);
         }
     }, []);
-    
+
     const handlePasteFromClipboard = useCallback(async () => {
         try {
             const text = await navigator.clipboard.readText();
@@ -126,7 +123,7 @@ export function JamlEditor({ onJamlChange, initialJaml }: JamlEditorProps) {
     }, []);
 
     return (
-        <Paper p="sm" radius="md" style={{ backgroundColor: 'var(--mantine-color-dark-7)' }}>
+        <Paper p="sm" radius="md" bg={theme.colors.dark[7]}>
             <Stack gap="sm">
                 {/* Header */}
                 <Group justify="space-between" align="center">
@@ -178,33 +175,29 @@ export function JamlEditor({ onJamlChange, initialJaml }: JamlEditorProps) {
                     </Group>
                 </Group>
 
-                {/* Editor Mode Toggle - small switch in corner */}
+                {/* Form = noob-friendly configurator; Text = plain YAML */}
                 <Group justify="flex-end" mb={4}>
                     <SegmentedControl
                         value={editorMode}
-                        onChange={(value) => setEditorMode(value as 'text' | 'interactive')}
+                        onChange={(value) => setEditorMode(value as 'form' | 'text')}
                         data={[
-                            { label: '✨ Interactive', value: 'interactive' },
-                            { label: '📝 Raw', value: 'text' },
+                            { label: 'Form', value: 'form' },
+                            { label: 'Plain text', value: 'text' },
                         ]}
                         size="xs"
                     />
                 </Group>
 
-                {/* Dream Editor (Interactive) */}
-                {editorMode === 'interactive' && (
-                    <InteractiveJamlEditor
+                {editorMode === 'form' && (
+                    <JamlConfigurator
                         initialJaml={jamlText}
                         onJamlChange={(yamlStr, parsed, isValid) => {
                             setJamlText(yamlStr);
-                            if (onJamlChange) {
-                                onJamlChange(parsed, isValid);
-                            }
+                            if (onJamlChange) onJamlChange(parsed, isValid);
                         }}
                     />
                 )}
 
-                {/* Raw Text Mode (fallback) */}
                 {editorMode === 'text' && (
                     <Paper p="xs" radius="sm" bg={theme.colors.dark[8]}>
                         <Textarea

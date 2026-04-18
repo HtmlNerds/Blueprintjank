@@ -3,12 +3,12 @@ import { createJSONStorage, devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import { LOCATIONS, LOCATION_TYPES, options } from "../const.ts";
 import { sanitizeSeed } from "../utils.ts";
-import { convertToDeckCard, generateStartingDeck, convertGameCardToDeckCard } from "../deckUtils.ts";
-import type { DeckCard } from "../deckUtils.ts";
+import { convertGameCardToDeckCard, convertToDeckCard, generateStartingDeck } from "../deckUtils.ts";
 import { Game } from "../balatrots/Game.ts";
 import { InstanceParams } from "../balatrots/struct/InstanceParams.ts";
 import { Deck, deckMap } from "../balatrots/enum/Deck.ts";
 import { Stake, stakeMap } from "../balatrots/enum/Stake.ts";
+import type { DeckCard } from "../deckUtils.ts";
 import type { StateStorage } from "zustand/middleware";
 import type { BuyMetaData } from "../classes/BuyMetaData.ts";
 import type { SeedResultsContainer } from "../GameEngine/CardEngines/Cards.ts";
@@ -50,6 +50,7 @@ export interface InitialState {
         maxMiscCardSource: number;
         rerollStartIndex: number;
         conversionSourceId: string | null;
+        apiEndpoint: string;
     };
     searchState: {
         searchTerm: string;
@@ -88,7 +89,7 @@ interface StoreActions {
     setGameVersion: (gameVersion: string) => void;
     setSelectedOptions: (selectedOptions: Array<string>) => void;
     setUseCardPeek: (useCardPeek: boolean) => void;
-    setStart: (start: boolean) => void;
+    setStart: (start: boolean, keepSettingsOpen?: boolean) => void;
     setShowCardSpoilers: (showCardSpoilers: boolean) => void;
     openSelectOptionModal: () => void;
     closeSelectOptionModal: () => void;
@@ -104,6 +105,7 @@ interface StoreActions {
     setSelectedBlind: (selectedBlind: Blinds) => void;
     toggleSettings: () => void;
     toggleOutput: () => void;
+    setApiEndpoint: (apiEndpoint: string) => void;
     setMiscSource: (source: string) => void;
     setAsideTab: (tab: string) => void;
     setSearchString: (searchString: string) => void;
@@ -172,7 +174,8 @@ const initialState: InitialState = {
         maxMiscCardSource: 15,
         rerollStartIndex: 0,
         drawSimulatorModalOpen: false,
-        conversionSourceId: null
+        conversionSourceId: null,
+        apiEndpoint: 'https://motelyjaml-pi.8pi.me'
     },
     searchState: {
         searchTerm: '',
@@ -366,9 +369,12 @@ export const useCardStore = create<CardStore>()(
                         prev.applicationState.hasSettingsChanged = true;
                     }, undefined, 'Global/SetSelectedOptions'),
 
-                    setStart: (start) => set((prev) => {
+                    setStart: (start, keepSettingsOpen) => set((prev) => {
                         prev.applicationState.start = start
-                        prev.applicationState.settingsOpen = false
+                        // Don't close settings in JAML mode unless explicitly requested
+                        if (!keepSettingsOpen && prev.applicationState.viewMode !== 'jaml') {
+                            prev.applicationState.settingsOpen = false
+                        }
                     }, undefined, 'Global/SetStart'),
 
                     setShowCardSpoilers: (showCardSpoilers) => set((prev) => {
@@ -420,6 +426,9 @@ export const useCardStore = create<CardStore>()(
                     toggleOutput: () => set((prev) => {
                         prev.applicationState.asideOpen = !prev.applicationState.asideOpen;
                     }, undefined, 'Global/ToggleOutput'),
+                    setApiEndpoint: (apiEndpoint) => set((prev) => {
+                        prev.applicationState.apiEndpoint = apiEndpoint;
+                    }, undefined, 'Global/SetApiEndpoint'),
                     setMiscSource: (source) => set((prev) => {
                         prev.applicationState.miscSource = source
                     }, undefined, "Global/SetMiscSource"),
@@ -500,7 +509,7 @@ export const useCardStore = create<CardStore>()(
                     }, undefined, 'Cards/ClearLockedCards'),
 
                     initializeDeck: (deckType?: string, game?: Game) => set((prev) => {
-                        let starterDeck: DeckCard[];
+                        let starterDeck: Array<DeckCard>;
 
                         if (game) {
                             const gameCards = game.getShuffledDeck(get().applicationState.selectedAnte);

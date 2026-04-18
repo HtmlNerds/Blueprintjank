@@ -3,16 +3,19 @@ import '@mantine/code-highlight/styles.css';
 import '@mantine/carousel/styles.css';
 import '@mantine/spotlight/styles.css';
 
-import { MantineProvider, Paper, Space, Stack, Text, Title } from "@mantine/core";
-import { Blueprint } from "./components/blueprint/standardView";
+
+import { MantineProvider, Stack, Text } from "@mantine/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
+import { NextStepProvider, NextStepReact   } from 'nextstepjs';
+import { Blueprint } from "./components/blueprint/standardView";
 import { SeedResultProvider } from "./modules/state/analysisResultProvider.tsx";
 import { SeedOptionsProvider } from "./modules/state/optionsProvider.tsx";
 import { DownloadSeedResultProvider } from "./modules/state/downloadProvider.tsx";
 import { BlueprintThemeProvider, useBlueprintTheme } from "./modules/state/themeProvider.tsx";
-import { NextStepProvider, NextStep, type Tour, type Step } from 'nextstepjs';
 import { useCardStore } from "./modules/state/store.ts";
+import { JamlSearchProvider } from "./modules/state/jamlSearchContext.tsx";
+import type { Tour } from 'nextstepjs';
 
 const queryClient = new QueryClient()
 
@@ -315,20 +318,17 @@ function ProviderContainer({ children }: { children: React.ReactNode }) {
 
     return (
 
-        <MantineProvider
-            defaultColorScheme={'auto'}
-            theme={themes[theme]}
-        >
+        <MantineProvider defaultColorScheme={'dark'} theme={themes[theme]}>
             <QueryClientProvider client={queryClient}>
                 <SeedOptionsProvider>
                     <SeedResultProvider>
                         <DownloadSeedResultProvider>
                             <NextStepProvider>
-                                <NextStep
+                                <NextStepReact
                                     steps={steps}
                                     onStepChange={handleStepChange}>
                                     {children}
-                                </NextStep>
+                                </NextStepReact>
                             </NextStepProvider>
                         </DownloadSeedResultProvider>
                     </SeedResultProvider>
@@ -341,9 +341,11 @@ function ProviderContainer({ children }: { children: React.ReactNode }) {
 export default function App() {
     return (
         <BlueprintThemeProvider>
-            <ProviderContainer>
-                <Blueprint/>
-            </ProviderContainer>
+            <JamlSearchProvider>
+                <ProviderContainer>
+                    <Blueprint/>
+                </ProviderContainer>
+            </JamlSearchProvider>
         </BlueprintThemeProvider>
     );
 }
