@@ -12,6 +12,9 @@ import { SeedOptionsProvider } from "./modules/state/optionsProvider.tsx";
 import { DownloadSeedResultProvider } from "./modules/state/downloadProvider.tsx";
 import { BlueprintThemeProvider, useBlueprintTheme } from "./modules/state/themeProvider.tsx";
 import { JamlSearchProvider } from "./modules/state/jamlSearchContext.tsx";
+import { setJamlAssetBaseUrl } from "jaml-ui";
+
+setJamlAssetBaseUrl("./images");
 
 const queryClient = new QueryClient()
 

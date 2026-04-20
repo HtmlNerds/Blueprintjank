@@ -1220,13 +1220,9 @@ function JamlView() {
 
 
 
-    if (!SeedResults) return null;
+    const pool = SeedResults?.antes;
 
-
-
-    const pool = SeedResults.antes;
-
-    const availableAntes = Object.keys(pool).map(Number).sort((a, b) => a - b);
+    const availableAntes = pool ? Object.keys(pool).map(Number).sort((a, b) => a - b) : [];
 
 
 
