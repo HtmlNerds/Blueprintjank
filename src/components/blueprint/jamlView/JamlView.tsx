@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
     ActionIcon,
     Button,
@@ -443,10 +443,6 @@ function JamlView() {
         customJamlText,
     } = useJamlSearch();
 
-    const [wasmVersion, setWasmVersion] = useState<string | null>(null);
-
-    const [wasmSimdEnabled, setWasmSimdEnabled] = useState<boolean | null>(null);
-
     // JAML Editor state
 
     const [jamlConfig, setJamlConfig] = useState<any>(null);
@@ -457,12 +453,9 @@ function JamlView() {
 
     const [wasmError, setWasmError] = useState<string | null>(null);
 
-    const [wasmResults, setWasmResults] = useState<Array<{ seed: string; score: number }>>([]);
+    const [wasmResults, setWasmResults] = useState<Array<{ seed: string; score: number; tallyColumns?: number[]; tallyLabels?: string[] }>>([]);
 
     const searchRef = useRef<Motely.IMotelyWasmSearch | null>(null);
-    const cancelledRef = useRef(false);
-    const progressHandlerRef = useRef<((s: bigint, m: bigint) => void) | null>(null);
-    const resultHandlerRef = useRef<((seed: string, score: number, tally: Int32Array) => void) | null>(null);
 
     const wasmSeenRef = useRef<Set<string>>(new Set());
 
@@ -480,7 +473,7 @@ function JamlView() {
 
     // Batch onResult into ref, flush periodically
 
-    const wasmResultBatchRef = useRef<Array<{ seed: string; score: number }>>([]);
+    const wasmResultBatchRef = useRef<Array<{ seed: string; score: number; tallyColumns?: number[]; tallyLabels?: string[] }>>([]);
 
 
 
@@ -697,7 +690,7 @@ function JamlView() {
 
 
 
-        await motely.boot();
+        if (motely.getStatus() !== motely.BootStatus.Booted) await motely.boot();
 
         setWasmStatus('running');
 
@@ -860,11 +853,13 @@ function JamlView() {
                 perf.onProgressCalls += 1;
                 perf.onProgressMs += performance.now() - t0;
             };
-            const resultHandler = (seed: string, score: number, _tallyColumns: Int32Array) => {
+            const tallyLabels: string[] = MotelyWasm.getTallyLabels(jamlText);
+
+            const resultHandler = (seed: string, score: number, tallyColumns: Int32Array) => {
                 const t0 = performance.now();
                 if (wasmSeenRef.current.has(seed)) return;
                 wasmSeenRef.current.add(seed);
-                wasmResultBatchRef.current.push({ seed, score });
+                wasmResultBatchRef.current.push({ seed, score, tallyColumns: Array.from(tallyColumns), tallyLabels });
                 const perf = wasmPerfRef.current;
                 perf.onResultCalls += 1;
                 perf.onResultMs += performance.now() - t0;
@@ -877,7 +872,7 @@ function JamlView() {
             if (searchMode === 'funny' && funnyMode === 'keyword') {
                 search = MotelyWasm.startKeywordSearch(jamlText, (funnyKeywords || []).join(','), '');
             } else {
-                search = MotelyWasm.startRandomSearch(jamlText, 1000000);
+                search = MotelyWasm.startRandomSearch(jamlText, 100);
             }
 
             searchRef.current = search;
@@ -887,54 +882,18 @@ function JamlView() {
             MotelyWasmEvents.onProgress.unsubscribe(progressHandler);
             MotelyWasmEvents.onResult.unsubscribe(resultHandler);
 
-            void completion;
-
-            // Final perf log
-            {
-                const perf = wasmPerfRef.current;
-                const searched = wasmSeedsSearchedRef.current;
-                const elapsedS = wasmElapsedMsRef.current / 1000;
-                const speed = elapsedS > 0 ? Math.round(searched / elapsedS) : 0;
-
-                console.log('[MotelySearchPerf][final]', {
-                    workerCount: 1,
-                    speedSeedsPerSec: speed,
-                    searched,
-                    hits: wasmResultCountRef.current,
-                    elapsedMs: wasmElapsedMsRef.current,
-                    wallElapsedMs: Math.round(performance.now() - perf.searchStartAt),
-                    jsOnProgressCalls: perf.onProgressCalls,
-                    jsOnResultCalls: perf.onResultCalls,
-                    jsOnProgressMs: Math.round(perf.onProgressMs),
-                    jsOnResultMs: Math.round(perf.onResultMs),
-                    jsFlushCalls: perf.flushCalls,
-                    jsFlushMs: Math.round(perf.flushMs),
-                });
-            }
-
-            // Final flush
             if (wasmProgressTimerRef.current) {
                 clearInterval(wasmProgressTimerRef.current);
                 wasmProgressTimerRef.current = null;
             }
 
-            const el = wasmProgressElRef.current;
-            if (el) {
-                const searched = wasmSeedsSearchedRef.current;
-                const hits = wasmResultCountRef.current;
-                const elapsedS = wasmElapsedMsRef.current / 1000;
-                const speed = elapsedS > 0 ? Math.round(searched / elapsedS) : 0;
-                const hitsPerSec = elapsedS > 0 ? (hits / elapsedS).toFixed(2) : '0';
-                el.textContent =
-                    `${searched.toLocaleString()} seeds \u2022 ${hits.toLocaleString()} hits (${hitsPerSec} h/s) \u2022 ${speed.toLocaleString()} s/s \u2022 ${elapsedS.toFixed(1)}s \u2022 1t`;
-            }
+            const allResults = wasmResultBatchRef.current.slice(0, 200);
+            wasmResultBatchRef.current = [];
+            setWasmResults(allResults);
 
-            // Flush remaining results
-            if (wasmResultBatchRef.current.length > 0) {
-                const batch = wasmResultBatchRef.current;
-                wasmResultBatchRef.current = [];
-                setWasmResults(prev => [...batch, ...prev].slice(0, 200));
-            }
+            const elapsed = Math.round(performance.now() - wasmPerfRef.current.searchStartAt);
+            const totalFound = Number(completion.matchingSeeds);
+            console.log(`[MotelySearch] ${totalFound} seeds found in ${elapsed}ms, showing ${allResults.length}`);
 
             searchRef.current = null;
             setWasmStatus('done');
@@ -1230,7 +1189,7 @@ function JamlView() {
 
     const selectedAntesArray = Array.from(selectedAntes).filter(ante => availableAntes.includes(ante)).sort((a, b) => a - b);
 
-    const analyzerAntes: AnalyzerAnteView[] = selectedAntesArray.flatMap(anteNum => {
+    const analyzerAntes: AnalyzerAnteView[] = pool ? selectedAntesArray.flatMap(anteNum => {
         const anteData = pool[anteNum];
         if (!anteData) return [];
         const shop: AnalyzerItem[] = anteData.queue.slice(0, 30).map((card: any, i: number) => {
@@ -1259,7 +1218,7 @@ function JamlView() {
             packs,
         };
         return [view];
-    });
+    }) : [];
 
 
 
@@ -1536,7 +1495,7 @@ function JamlView() {
 
             {/* Ante view */}
 
-            <div style={{ flex: 1, minHeight: 0, overflow: 'hidden' }}>
+            <div style={{ height: '50dvh', overflow: 'hidden', flexShrink: 0 }}>
                 <AnalyzerExplorer
                     antes={analyzerAntes}
                     visibleAntes={selectedAntesArray.length}
