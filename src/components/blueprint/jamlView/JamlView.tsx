@@ -836,64 +836,38 @@ function JamlView() {
 
 
 
-        try {
+        const tallyLabels: string[] = MotelyWasm.getTallyLabels(jamlText);
 
-            const progressHandler = (seedsSearched: bigint, matchingSeeds: bigint) => {
-                                const t0 = performance.now();
-                wasmSeedsSearchedRef.current = Number(seedsSearched);
-                wasmResultCountRef.current = Number(matchingSeeds);
-                wasmElapsedMsRef.current = Math.round(performance.now() - wasmPerfRef.current.searchStartAt);
-                const perf = wasmPerfRef.current;
-                perf.onProgressCalls += 1;
-                perf.onProgressMs += performance.now() - t0;
-            };
-            const tallyLabels: string[] = MotelyWasm.getTallyLabels(jamlText);
+        const progressHandler = (seedsSearched: bigint, matchingSeeds: bigint) => {
+            const t0 = performance.now();
+            wasmSeedsSearchedRef.current = Number(seedsSearched);
+            wasmResultCountRef.current = Number(matchingSeeds);
+            wasmElapsedMsRef.current = Math.round(performance.now() - wasmPerfRef.current.searchStartAt);
+            const perf = wasmPerfRef.current;
+            perf.onProgressCalls += 1;
+            perf.onProgressMs += performance.now() - t0;
+        };
 
-            const resultHandler = (seed: string, score: number, tallyColumns: Int32Array) => {
-                const t0 = performance.now();
-                if (wasmSeenRef.current.has(seed)) return;
-                wasmSeenRef.current.add(seed);
-                wasmResultBatchRef.current.push({ seed, score, tallyColumns: Array.from(tallyColumns), tallyLabels });
-                const perf = wasmPerfRef.current;
-                perf.onResultCalls += 1;
-                perf.onResultMs += performance.now() - t0;
-            };
+        const resultHandler = (seed: string, score: number, tallyColumns: Int32Array) => {
+            const t0 = performance.now();
+            if (wasmSeenRef.current.has(seed)) return;
+            wasmSeenRef.current.add(seed);
+            wasmResultBatchRef.current.push({ seed, score, tallyColumns: Array.from(tallyColumns), tallyLabels });
+            const perf = wasmPerfRef.current;
+            perf.onResultCalls += 1;
+            perf.onResultMs += performance.now() - t0;
+        };
 
-            const completion = await new Promise<{ matchingSeeds: bigint }>((resolve, reject) => {
-                const completeHandler = (_status: string, _total: bigint, matchingSeeds: bigint) => {
-                    MotelyWasmEvents.onProgress.unsubscribe(progressHandler);
-                    MotelyWasmEvents.onResult.unsubscribe(resultHandler);
-                    MotelyWasmEvents.onComplete.unsubscribe(completeHandler);
-                    resolve({ matchingSeeds });
-                };
-
-                MotelyWasmEvents.onProgress.subscribe(progressHandler);
-                MotelyWasmEvents.onResult.subscribe(resultHandler);
-                MotelyWasmEvents.onComplete.subscribe(completeHandler);
-
-                try {
-                    let search: Motely.IMotelyWasmSearch;
-                    if (searchMode === 'funny' && funnyMode === 'keyword') {
-                        const kw = (funnyKeywords || []).map(k => k.trim().toUpperCase()).filter(Boolean).join(',');
-                        search = MotelyWasm.startKeywordSearch(jamlText, kw, '');
-                    } else {
-                        search = MotelyWasm.startRandomSearch(jamlText, 100);
-                    }
-                    searchRef.current = search;
-                } catch (e) {
-                    MotelyWasmEvents.onProgress.unsubscribe(progressHandler);
-                    MotelyWasmEvents.onResult.unsubscribe(resultHandler);
-                    MotelyWasmEvents.onComplete.unsubscribe(completeHandler);
-                    reject(e);
-                }
-            });
+        const completeHandler = (_status: string, _total: bigint, matchingSeeds: bigint) => {
+            MotelyWasmEvents.onProgress.unsubscribe(progressHandler);
+            MotelyWasmEvents.onResult.unsubscribe(resultHandler);
+            MotelyWasmEvents.onComplete.unsubscribe(completeHandler);
 
             if (wasmProgressTimerRef.current) {
                 clearInterval(wasmProgressTimerRef.current);
                 wasmProgressTimerRef.current = null;
             }
 
-            // Final DOM update — search may complete synchronously before the interval fires
             if (wasmProgressElRef.current) {
                 const searched = wasmSeedsSearchedRef.current;
                 const hits = wasmResultCountRef.current;
@@ -909,22 +883,33 @@ function JamlView() {
             setWasmResults(allResults);
 
             const elapsed = Math.round(performance.now() - wasmPerfRef.current.searchStartAt);
-            const totalFound = Number(completion.matchingSeeds);
-            console.log(`[MotelySearch] ${totalFound} seeds found in ${elapsed}ms, showing ${allResults.length}`);
+            console.log(`[MotelySearch] ${Number(matchingSeeds)} seeds found in ${elapsed}ms, showing ${allResults.length}`);
 
             searchRef.current = null;
             setWasmStatus('done');
+        };
 
+        try {
+            MotelyWasmEvents.onProgress.subscribe(progressHandler);
+            MotelyWasmEvents.onResult.subscribe(resultHandler);
+            MotelyWasmEvents.onComplete.subscribe(completeHandler);
+
+            if (searchMode === 'funny' && funnyMode === 'keyword') {
+                const kw = (funnyKeywords || []).map(k => k.trim().toUpperCase()).filter(Boolean).join(',');
+                searchRef.current = MotelyWasm.startKeywordSearch(jamlText, kw, '');
+            } else {
+                searchRef.current = MotelyWasm.startRandomSearch(jamlText, 100);
+            }
         } catch (err: any) {
+            MotelyWasmEvents.onProgress.unsubscribe(progressHandler);
+            MotelyWasmEvents.onResult.unsubscribe(resultHandler);
+            MotelyWasmEvents.onComplete.unsubscribe(completeHandler);
 
             if (wasmProgressTimerRef.current) { clearInterval(wasmProgressTimerRef.current); wasmProgressTimerRef.current = null; }
 
             searchRef.current = null;
-
             setWasmStatus('error');
-
             setWasmError(err?.message || String(err));
-
         }
 
     }, [jamlValid, jamlConfig, searchMode, funnyMode, funnyKeywords]);
