@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [react()],
   base: process?.env?.BASE_PATH || './',
   server: {
-    port: 3000,
+    port: 3141,
     host: true,
     cors: true,
     allowedHosts: ['*.8pi.me*', 'motelyjaml-pi.8pi.me'],
@@ -15,7 +15,7 @@ export default defineConfig({
     host: true,
   },
   optimizeDeps: {
-    exclude: ['@aspect-build/bazel-lib'],
+    exclude: ['motely-wasm'],
   },
   assetsInclude: ['**/*.wasm'],
   build: {
