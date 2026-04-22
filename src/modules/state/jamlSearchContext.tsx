@@ -6,6 +6,8 @@ interface JamlSearchState {
     funnyMode: 'palindrome' | 'keyword';
     funnyKeywords: Array<string>;
     jamlText: string;
+    selectedFilterKey: string;
+    customJamlText: string;
 }
 
 interface JamlSearchContextType extends JamlSearchState {
@@ -13,6 +15,8 @@ interface JamlSearchContextType extends JamlSearchState {
     setFunnyMode: (mode: 'palindrome' | 'keyword') => void;
     setFunnyKeywords: (keywords: Array<string>) => void;
     setJamlText: (text: string) => void;
+    setSelectedFilterKey: (key: string) => void;
+    setCustomJamlText: (text: string) => void;
 }
 
 const JamlSearchContext = createContext<JamlSearchContextType | undefined>(undefined);
@@ -52,11 +56,13 @@ export function JamlSearchProvider({ children }: { children: ReactNode }) {
     const [funnyMode, setFunnyMode] = useState<'palindrome' | 'keyword'>('palindrome');
     const [funnyKeywords, setFunnyKeywords] = useState<Array<string>>(['']);
     const [jamlText, setJamlText] = useState<string>(DEFAULT_JAML);
+    const [selectedFilterKey, setSelectedFilterKey] = useState<string>('default');
+    const [customJamlText, setCustomJamlText] = useState<string>('');
 
     return (
         <JamlSearchContext.Provider value={{
-            searchMode, funnyMode, funnyKeywords, jamlText,
-            setSearchMode, setFunnyMode, setFunnyKeywords, setJamlText,
+            searchMode, funnyMode, funnyKeywords, jamlText, selectedFilterKey, customJamlText,
+            setSearchMode, setFunnyMode, setFunnyKeywords, setJamlText, setSelectedFilterKey, setCustomJamlText,
         }}>
             {children}
         </JamlSearchContext.Provider>
