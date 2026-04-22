@@ -1400,16 +1400,7 @@ function JamlView() {
 
 
 
-            {/* JAML Editor - Collapsible, shares header above */}
-
-            <JamlIde
-                key={selectedFilterKey}
-                jaml={selectedFilterKey === '__custom__' ? customJamlText : JAML_PRESETS[selectedFilterKey]}
-                onChange={handleJamlChange}
-                searchResults={wasmResults}
-                onSearch={wasmStatus === 'running' ? handleWasmStop : handleWasmSearch}
-                isSearching={wasmStatus === 'running'}
-            />
+            {/* JAML Editor now rendered in navbar.tsx under the filter dropdown */}
 
 
 
