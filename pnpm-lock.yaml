@@ -36,8 +36,8 @@ importers:
         specifier: ^10.1.3
         version: 10.2.0
       jaml-ui:
-        specifier: 0.5.2
-        version: 0.5.2(motely-wasm@12.2.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^0.8.0
+        version: 0.8.0(motely-wasm@12.4.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       js-convert-case:
         specifier: ^4.2.0
         version: 4.2.0
@@ -45,8 +45,8 @@ importers:
         specifier: ^4.1.1
         version: 4.1.1
       motely-wasm:
-        specifier: ^12.2.0
-        version: 12.2.0
+        specifier: ^12.4.0
+        version: 12.4.0
       motion:
         specifier: ^12.29.2
         version: 12.38.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1711,8 +1711,8 @@ packages:
     resolution: {integrity: sha512-H0dkQoCa3b2VEeKQBOxFph+JAbcrQdE7KC0UkqwpLmv2EC4P41QXP+rqo9wYodACiG5/WM5s9oDApTU8utwj9g==}
     engines: {node: '>= 0.4'}
 
-  jaml-ui@0.5.2:
-    resolution: {integrity: sha512-3EFmtVIPQfxFo6CtpYaXrx4c7BVHoTaoxBWriMuQoaAOZC3wGsqS/tyDzArAcLvCskpODZJXgvKupHXuhemDvg==}
+  jaml-ui@0.8.0:
+    resolution: {integrity: sha512-0PZSQcVx5V6eJGaM88vhpSYPg0UByccnrN4ylcEn4072nW0VMF+IAoogy81iFyUpIoGk8Gy689TlWZBzqQptug==}
     engines: {node: '>=18'}
     peerDependencies:
       '@react-spring/three': '>=9.0.0'
@@ -1812,8 +1812,8 @@ packages:
   minimatch@3.1.5:
     resolution: {integrity: sha512-VgjWUsnnT6n+NUk6eZq77zeFdpW2LWDzP6zFGrCbHXiYNul5Dzqk2HHQ5uFH2DNW5Xbp8+jVzaeNt94ssEEl4w==}
 
-  motely-wasm@12.2.0:
-    resolution: {integrity: sha512-JpDlz+ResHKTP1a6/3Mt0Mryd8OLqbg8joca3mSZ2QMRvsIm7kXJa3xcahRsxBo7311ZjCiw+Q4zy0WcmMtRYg==}
+  motely-wasm@12.4.0:
+    resolution: {integrity: sha512-pKUYzeQYA9dJ8HGe8zFG8V5o1jxuPhTOppBQ+oBXzMyNsDONfAUuHrs5twHxdMRjw8hjx0roRoBpB3Zu1HOcvg==}
 
   motion-dom@12.38.0:
     resolution: {integrity: sha512-pdkHLD8QYRp8VfiNLb8xIBJis1byQ9gPT3Jnh2jqfFtAsWUA3dEepDlsWe/xMpO8McV+VdpKVcp+E+TGJEtOoA==}
@@ -4286,12 +4286,12 @@ snapshots:
       has-symbols: 1.1.0
       set-function-name: 2.0.2
 
-  jaml-ui@0.5.2(motely-wasm@12.2.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  jaml-ui@0.8.0(motely-wasm@12.4.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
     optionalDependencies:
-      motely-wasm: 12.2.0
+      motely-wasm: 12.4.0
 
   jiti@2.6.1: {}
 
@@ -4361,7 +4361,7 @@ snapshots:
     dependencies:
       brace-expansion: 1.1.14
 
-  motely-wasm@12.2.0: {}
+  motely-wasm@12.4.0: {}
 
   motion-dom@12.38.0:
     dependencies:
