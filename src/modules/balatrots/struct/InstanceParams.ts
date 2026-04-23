@@ -4,7 +4,7 @@ import {
 } from '../enum/Deck';
 import { Stake, StakeType } from '../enum/Stake';
 import { Version } from '../enum/Version';
-import { Voucher } from '../enum/Voucher';
+import type { Voucher } from '../enum/Voucher';
 
 export class InstanceParams {
     private deck: Deck;

@@ -1,26 +1,26 @@
-import { Card } from "./enum/cards/Card";
+import type {MiscCardSource} from "../GameEngine";
+import type { Card } from "./enum/cards/Card";
 // import { Edition } from "./enum/Edition";
-import { PackKind } from "./enum/packs/PackKind";
-import { JokerData } from "./struct/JokerData";
-import { MiscCardSource } from "../GameEngine";
-import { BossBlind } from "./enum/BossBlind.ts";
+import type { PackKind } from "./enum/packs/PackKind";
+import type { JokerData } from "./struct/JokerData";
+import type {BossBlind} from "./enum/BossBlind.ts";
 
 export interface IResult {
 	ante: number;
 	voucher: string;
-	shop: (Card | JokerData)[];
-	packs: {
+	shop: Array<Card | JokerData>;
+	packs: Array<{
 		kind: PackKind;
-		cards: (Card | JokerData)[];
-	}[];
-	tags?: string[];
+		cards: Array<Card | JokerData>;
+	}>;
+	tags?: Array<string>;
 	boss?: BossBlind
-	miscQueues?: MiscCardSource[];
+	miscQueues?: Array<MiscCardSource>;
 }
 
 export class Result {
 	currentAnte: number;
-	private result: IResult[] = [];
+	private result: Array<IResult> = [];
 
 	constructor() {
 		this.currentAnte = 1
@@ -37,7 +37,7 @@ export class Result {
 		return this.currentAnte;
 	}
 
-	get getResult(): IResult[] {
+	get getResult(): Array<IResult> {
 		return this.result;
 	}
 
@@ -49,7 +49,7 @@ export class Result {
 		}
 	}
 
-	addItemToShopQueue(item: Card | JokerData) {
+	addItemToShopQueue(item:Card | JokerData) {
 		if (!this.result[this.currentAnte - 1]?.shop) {
 			this.result[this.currentAnte - 1] = {
 				...this.result[this.currentAnte - 1],
@@ -77,7 +77,7 @@ export class Result {
 			this.result[this.currentAnte - 1].tags!.push(tag);
 		}
 	}
-	addPackToQueue(kind: PackKind, cards: (Card | JokerData)[]) {
+	addPackToQueue(kind: PackKind, cards: Array<Card | JokerData>) {
 		if (!this.result[this.currentAnte - 1]?.packs) {
 			this.result[this.currentAnte - 1] = {
 				...this.result[this.currentAnte - 1],
@@ -89,13 +89,13 @@ export class Result {
 			cards,
 		});
 	}
-	addMiscCardSourcesToQueue(miscSources: MiscCardSource[]) {
-		if (!this.result[this.currentAnte - 1]?.miscQueues) {
+	addMiscCardSourcesToQueue(miscSources:Array<MiscCardSource>) {
+		if(!this.result[this.currentAnte - 1]?.miscQueues) {
 			this.result[this.currentAnte - 1] = {
 				...this.result[this.currentAnte - 1],
 				miscQueues: miscSources,
 			};
-		} else {
+		}else{
 			this.result[this.currentAnte - 1].miscQueues!.push(...miscSources);
 		}
 	}

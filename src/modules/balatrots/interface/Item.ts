@@ -1,21 +1,22 @@
-import { Edition, EditionItem } from "../enum/Edition";
-import { Filter } from "./Filter";
+import { EditionItem } from "../enum/Edition";
+import type { Edition} from "../enum/Edition";
+import type { Filter } from "./Filter";
 
 export interface Item {
     name: string;
-    getName(): string;
+    getName: () => string;
 
-    eq(item: Item): boolean;
+    eq: (item: Item) => boolean;
 
-    equals(value: string): boolean;
+    equals: (value: string) => boolean;
 
-    inPack(ante?: number): Filter;
+    inPack: (ante?: number) => Filter;
 
-    inShop(ante?: number): Filter;
+    inShop: (ante?: number) => Filter;
 
-    inSpectral(ante?: number): Filter;
+    inSpectral: (ante?: number) => Filter;
 
-    edition(edition: Edition): any;
+    edition: (edition: Edition) => any;
 }
 
 export class ItemImpl implements Item {

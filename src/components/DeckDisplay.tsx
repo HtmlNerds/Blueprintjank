@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
     Accordion,
     ActionIcon,
@@ -16,9 +16,10 @@ import {
     Title,
     Tooltip,
 } from '@mantine/core';
-import { IconCards, IconTrash, IconRefresh, IconArrowBackUp, IconArrowForwardUp, IconEdit, IconChevronRight, IconPlayerPlay, IconCopy, IconArrowsLeftRight, IconCircleX } from '@tabler/icons-react';
+import { IconArrowBackUp, IconArrowForwardUp, IconArrowsLeftRight, IconCards, IconChevronRight, IconCircleX, IconCopy, IconEdit, IconPlayerPlay, IconRefresh, IconTrash } from '@tabler/icons-react';
 import { useCardStore } from '../modules/state/store.ts';
-import { getDeckStats, type DeckCard, SUIT_CODES, RANK_CODES } from '../modules/deckUtils.ts';
+import {  RANK_CODES, SUIT_CODES, getDeckStats } from '../modules/deckUtils.ts';
+import type {DeckCard} from '../modules/deckUtils.ts';
 
 // Mini card component for deck display
 function MiniDeckCard({ card, onRemove, onUpdate, onDuplicate, onStartTransform, isTransformSource }: {
@@ -236,7 +237,7 @@ function MiniDeckCard({ card, onRemove, onUpdate, onDuplicate, onStartTransform,
 }
 
 // Deck statistics component
-function DeckStats({ cards }: { cards: DeckCard[] }) {
+function DeckStats({ cards }: { cards: Array<DeckCard> }) {
     const stats = useMemo(() => getDeckStats(cards), [cards]);
 
     return (
@@ -298,15 +299,12 @@ function DeckStats({ cards }: { cards: DeckCard[] }) {
 }
 
 // Cards grouped by suit
-function DeckBySuit({ cards }: { cards: DeckCard[] }) {
+function DeckBySuit({ cards }: { cards: Array<DeckCard> }) {
     const removeCard = useCardStore(state => state.removeCardFromDeck);
     const updateCard = useCardStore(state => state.updateCardInDeck);
     const duplicateCard = useCardStore(state => state.duplicateCard);
     const setConversionSource = useCardStore(state => state.setConversionSource);
     const conversionSourceId = useCardStore(state => state.applicationState.conversionSourceId);
-
-    const suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
-    const rankOrder = ['A', 'K', 'Q', 'J', '10', '9', '8', '7', '6', '5', '4', '3', '2'];
 
     const handleCardClick = (targetCard: DeckCard) => {
         if (conversionSourceId && conversionSourceId !== targetCard.id) {
@@ -326,8 +324,10 @@ function DeckBySuit({ cards }: { cards: DeckCard[] }) {
         }
     };
 
+    const suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
     const cardsBySuit = useMemo(() => {
-        const grouped: Record<string, DeckCard[]> = {};
+        const rankOrder = ['A', 'K', 'Q', 'J', '10', '9', '8', '7', '6', '5', '4', '3', '2'];
+        const grouped: Record<string, Array<DeckCard>> = {};
         for (const suit of suits) {
             grouped[suit] = cards
                 .filter(c => c.suit === suit)

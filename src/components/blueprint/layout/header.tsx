@@ -1,14 +1,9 @@
 import React from "react";
-
-import { useViewportSize } from "@mantine/hooks";
-import { IconMoon, IconSun } from "@tabler/icons-react";
-import { ActionIcon, AppShell, Box, Burger, Button, Center, Container, CopyButton, Group, Select, Title, Tooltip, useMantineColorScheme } from "@mantine/core";
+import {useViewportSize} from "@mantine/hooks";
+import {AppShell, Box, Burger, Button, Center, Container, CopyButton, Group, Title} from "@mantine/core";
+import {useCardStore} from "../../../modules/state/store.ts";
 import SearchSeedInput from "../../searchInput.tsx";
-import { GaEvent } from "../../../modules/useGA.ts";
-import { useBlueprintTheme } from "../../../modules/state/themeProvider.tsx";
-import { useCardStore } from "../../../modules/state/store.ts";
-import type { KnownThemes } from "../../../modules/state/themeProvider.tsx";
-
+import {GaEvent} from "../../../modules/useGA.ts";
 
 export default function Header() {
     const { width } = useViewportSize();
@@ -19,26 +14,23 @@ export default function Header() {
     const outputOpened = useCardStore(state => state.applicationState.asideOpen);
     const toggleOutput = useCardStore(state => state.toggleOutput);
 
-    const colorScheme = useMantineColorScheme();
-    const { theme: themeName, setTheme, themes } = useBlueprintTheme();
-    const themeNames = Object.keys(themes);
-    const isDark = colorScheme.colorScheme === 'dark';
     return (
         <AppShell.Header>
             <Container fluid h={'100%'}>
                 <Group h={'100%'} justify={'space-between'}>
                     <Group flex={1}>
-                        <Burger opened={settingsOpened} onClick={toggleSettings} size="sm" />
+                        <Burger opened={settingsOpened} onClick={toggleSettings} hiddenFrom={'md'} size="sm" />
                         <Center h={'100%'}>
                             <Group grow>
                                 <Box flex={1}>
-                                    <Title order={5} fz={{ base: 'xs', sm: 'sm' }}> Blueprint </Title>
+                                    <Title > Blueprint </Title>
                                 </Box>
                             </Group>
                         </Center>
                     </Group>
+
                     <Group align={'center'}>
-                        {width > 600 && start && <Box id="search-input-header"><SearchSeedInput /></Box>}
+{width > 600 && start && <Box id="search-input-header"><SearchSeedInput /></Box>}
                         {width > 700 && start && (
                             <CopyButton value={new URL(window.location.href).toString()}>
                                 {({ copied, copy }) => (
@@ -48,25 +40,7 @@ export default function Header() {
                                 )}
                             </CopyButton>
                         )}
-                        <Select
-                            size="xs"
-                            w={width > 600 ? 100 : 80}
-                            value={themeName}
-                            onChange={(t) => { if (t) setTheme(t as KnownThemes); }}
-                            data={themeNames}
-                            styles={{ input: { fontSize: 'var(--mantine-font-size-xs)' } }}
-                        />
-                        <Tooltip label={isDark ? 'Light mode' : 'Dark mode'}>
-                            <ActionIcon
-                                variant="subtle"
-                                size="lg"
-                                onClick={() => colorScheme.toggleColorScheme()}
-                                aria-label="Toggle dark mode"
-                            >
-                                {isDark ? <IconSun size={18} /> : <IconMoon size={18} />}
-                            </ActionIcon>
-                        </Tooltip>
-                        <Burger opened={outputOpened} onClick={()=>{
+                        <Burger id="side-panel-toggle" opened={outputOpened} onClick={() => {
                             GaEvent('side_panel_toggled')
                             toggleOutput()
                         }} size="sm" />

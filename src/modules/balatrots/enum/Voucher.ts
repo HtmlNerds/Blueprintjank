@@ -69,5 +69,5 @@ export class VoucherItem extends ItemImpl {
 
     isPresent(): boolean {
         return this.isPresent();
-    }//TODO fix Filter/Voucher Filter implementation
+    }// TODO fix Filter/Voucher Filter implementation
 }

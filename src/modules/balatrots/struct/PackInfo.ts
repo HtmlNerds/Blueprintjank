@@ -1,6 +1,7 @@
-import { PackType, PackTypeItem } from '../enum/packs/PackType';
-import { PackKind } from '../enum/packs/PackKind';
-import { Option } from './Option';
+import { PackTypeItem } from '../enum/packs/PackType';
+import type { PackType} from '../enum/packs/PackType';
+import type { PackKind } from '../enum/packs/PackKind';
+import type { Option } from './Option';
 
 export class PackInfo {
     private _options: Set<Option> = new Set();

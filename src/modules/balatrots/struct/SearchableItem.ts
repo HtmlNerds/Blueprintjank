@@ -1,5 +1,5 @@
-import { ItemImpl } from '../interface/Item';
-import { Edition, EditionItem } from '../enum/Edition';
+import type { ItemImpl } from '../interface/Item';
+import type { EditionItem } from '../enum/Edition';
 
 export class SearchableItem {
     constructor(
@@ -15,7 +15,7 @@ export class SearchableItem {
         return this.edition !== undefined && this.edition.eq(edition);
     }
 
-    equals(item: ItemImpl): boolean {
+    equals(_item: ItemImpl): boolean {
         // if (item instanceof EditionItem && this.edition) {
         //     return item.eq(this.item) &&
         //         item.edition !== undefined &&

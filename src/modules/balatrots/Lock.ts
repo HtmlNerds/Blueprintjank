@@ -1,15 +1,15 @@
 import { ItemImpl } from "./interface/Item";
 import { JokerImpl } from "./interface/Joker";
 
-type lockeable = string | ItemImpl | string[] | JokerImpl;
+type lockeable = string | ItemImpl | Array<string> | JokerImpl;
 
 interface ILock {
-    lock(item: lockeable): void;
-    firstLock(): void;
-    unlock(item: lockeable): void;
-    isLocked(item: lockeable): boolean;
-    initLocks(ante: number, freshProfile: boolean, freshRun: boolean): void;
-    initUnlocks(ante: number, freshProfile: boolean): void;
+    lock: (item: lockeable) => void;
+    firstLock: () => void;
+    unlock: (item: lockeable) => void;
+    isLocked: (item: lockeable) => boolean;
+    initLocks: (ante: number, freshProfile: boolean, freshRun: boolean) => void;
+    initUnlocks: (ante: number, freshProfile: boolean) => void;
 }
 
 export class Lock implements ILock {
