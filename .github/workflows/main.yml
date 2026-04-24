@@ -38,11 +38,13 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
+      - name: checks
+        run: |
+             npm audit fix
       - name: update packages
         run: |
             npm update
             npm install
-            npm audit fix
       - name: Install dependencies
         run: npm ci
       - name: Build
