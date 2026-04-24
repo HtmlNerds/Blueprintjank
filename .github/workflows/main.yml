@@ -42,6 +42,7 @@ jobs:
         run: |
             npm update
             npm install
+            npm fund
             npm audit fix
         continue-on-error: true
       - name: Install dependencies
