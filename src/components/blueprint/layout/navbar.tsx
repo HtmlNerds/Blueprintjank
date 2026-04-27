@@ -8,13 +8,11 @@ import {
     InputLabel,
     NativeSelect,
     NumberInput,
-    Paper,
     SegmentedControl,
     Select,
     Stack,
     Switch,
     Text,
-    TextInput,
     Tooltip,
     useMantineTheme,
 } from "@mantine/core";
@@ -22,13 +20,9 @@ import {
     IconJoker,
     IconLayout,
     IconPlayCard,
-    IconSearch,
     IconSettings,
-    IconUpload,
 } from "@tabler/icons-react";
-import React from "react";
 import { useCardStore } from "../../../modules/state/store.ts";
-import { useJamlSearch } from "../../../modules/state/jamlSearchContext.tsx";
 import { GaEvent } from "../../../modules/useGA.ts";
 import SeedInputAutoComplete from "../../SeedInputAutoComplete.tsx";
 import UnlocksModal from "../../unlocksModal.tsx";
@@ -40,14 +34,6 @@ export default function Navbar() {
     const theme = useMantineTheme();
     const viewMode = useCardStore(state => state.applicationState.viewMode);
     const isJamlView = viewMode === 'jaml';
-    
-    // JAML search state from context
-    const {
-        selectedFilterKey,
-        setSelectedFilterKey,
-        setCustomJamlText,
-    } = useJamlSearch();
-    const jamlFileInputRef = React.useRef<HTMLInputElement>(null);
     const setViewMode = useCardStore(state => state.setViewMode);
 
     const analyzeState = useCardStore(state => state.engineState);
@@ -75,23 +61,12 @@ export default function Navbar() {
     const reset = useCardStore(state => state.reset);
     const setSelectedAnte = useCardStore(state => state.setSelectedAnte);
 
-    const handleJamlSearchClick = () => {
-        // In JAML mode, trigger the search by setting start=true
-        // The JamlView component will detect this and start the search
-        setStart(true);
-    }
-
     const handleAnalyzeClick = () => {
         setStart(true);
     };
 
-    const openBulkSeeds = () => {
-        // TODO: wire bulk seed import modal (e.g. useDisclosure + Modal with textarea)
-    };
-
     return (
         <AppShell.Navbar p="md">
-            <UnlocksModal />
             <UnlocksModal />
             <FeaturesModal />
             <DrawSimulatorModal />
@@ -145,108 +120,6 @@ export default function Navbar() {
                     mb="sm"
                 />
                 <Divider mb='md' />
-                {isJamlView && (
-                    <>
-                        {/* Game Config: Filter, Deck, Stake */}
-                        <Select
-                            label="JAML Filter"
-                            size="xs"
-                            placeholder="Select a filter..."
-                            value={selectedFilterKey}
-                            mb="xs"
-                            data={[
-                                {
-                                    group: 'Filters',
-                                    items: [
-                                        { value: 'default', label: 'Default (Generic)' },
-                                        { value: 'speedtest', label: 'Speedtest (Benchmark)' },
-                                    ]
-                                },
-                                {
-                                    group: 'Actions',
-                                    items: [
-                                        { value: '__create_new__', label: 'Create New...' },
-                                        { value: '__upload__', label: 'Upload .jaml File...' },
-                                    ]
-                                }
-                            ]}
-                            onChange={(value) => {
-                                if (!value) return;
-                                if (value === '__upload__') {
-                                    jamlFileInputRef.current?.click();
-                                    return;
-                                }
-                                setSelectedFilterKey(value);
-                            }}
-                        />
-                        <input
-                            type="file"
-                            ref={jamlFileInputRef}
-                            accept=".jaml,.yaml,.yml"
-                            style={{ display: 'none' }}
-                            onChange={(e) => {
-                                const file = e.target.files?.[0];
-                                if (file) {
-                                    const reader = new FileReader();
-                                    reader.onload = (ev) => {
-                                        const content = ev.target?.result as string;
-                                        if (content) {
-                                            setCustomJamlText(content);
-                                            setSelectedFilterKey('__custom__');
-                                        }
-                                    };
-                                    reader.readAsText(file);
-                                }
-                                e.target.value = '';
-                            }}
-                        />
-                        <Group align={'flex-end'} grow mb="xs">
-                            <Select
-                                label={'Deck'}
-                                value={deck}
-                                onChange={(value) => {
-                                    if (value) setDeck(value);
-                                }}
-                                size="sm"
-                                flex={1}
-                                data={[
-                                    "Red Deck",
-                                    "Blue Deck",
-                                    "Yellow Deck",
-                                    "Green Deck",
-                                    "Black Deck",
-                                    "Magic Deck",
-                                    "Nebula Deck",
-                                    "Ghost Deck",
-                                    "Abandoned Deck",
-                                    "Checkered Deck",
-                                    "Zodiac Deck",
-                                    "Painted Deck",
-                                    "Anaglyph Deck",
-                                    "Plasma Deck",
-                                    "Erratic Deck"
-                                ]}
-                            />
-                            <Select
-                                label={'Stake'}
-                                value={stake}
-                                onChange={(value) => {
-                                    if (value) setStake(value);
-                                }}
-                                size="sm"
-                                flex={1}
-                                data={[
-                                    "White Stake",
-                                    "Red Stake",
-                                    "Green Stake",
-                                    "Black Stake",
-                                    "Blue Stake",
-                                ]}
-                            />
-                        </Group>
-
-                    </>
-                )}
                 {!isJamlView && (
                     <>
                         <Group grow gap="xs" mb="xs">
@@ -387,43 +260,16 @@ export default function Navbar() {
             >
                 <Stack gap="xs">
                     {!isJamlView && (
-                        <Button
-                            id="analyze-button"
-                            onClick={handleAnalyzeClick}
-                            color="green"
-                            size="sm"
-                            fullWidth
-                        >
-                            Analyze Seed
-                        </Button>
-                    )}
-                    {isJamlView && (
                         <>
                             <Button
                                 id="analyze-button"
-                                onClick={handleJamlSearchClick}
+                                onClick={handleAnalyzeClick}
                                 color="green"
                                 size="sm"
                                 fullWidth
-                                leftSection={<IconSearch size={16} />}
                             >
-                                Search Seeds
+                                Analyze Seed
                             </Button>
-                            <Button
-                                id="import-seeds-button"
-                                onClick={openBulkSeeds}
-                                color="blue"
-                                variant="light"
-                                size="sm"
-                                fullWidth
-                                leftSection={<IconUpload size={16} />}
-                            >
-                                Import Seeds
-                            </Button>
-                        </>
-                    )}
-                    {!isJamlView && (
-                        <>
                             <Button
                                 id="features-button"
                                 color="grape"
@@ -456,11 +302,6 @@ export default function Navbar() {
                                 </Button>
                             </Group>
                         </>
-                    )}
-                    {isJamlView && (
-                        <Button color="red" variant={'filled'} onClick={() => reset()} size="sm" fullWidth>
-                            Reset
-                        </Button>
                     )}
                 </Stack>
             </AppShell.Section>
